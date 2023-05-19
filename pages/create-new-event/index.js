@@ -1,6 +1,7 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, Fragment } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import L10n from "../../L10n.json";
 import axios from "axios";
 import { LanguageContext } from "../../context/language-context";
@@ -32,23 +33,33 @@ const CreateEventPage = () => {
   }
 
   return (
-    <div>
-      <h1>{L10n[language].add_event}:</h1>
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Plan a new event</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to plaanning new events."}>
+        </meta>
+      </Head>
 
-      <div className="belowTitleContent">
-        <CreateEventForm
-          handleEvent={addEventHandler}
-          L10n={L10n}
-          language={language}
-          titleRef={title}
-          dateRef={date}
-          timeRef={time}
-          locationRef={location}
-          descriptionRef={description}
-          isAdd={true}
-        />
+      <div>
+        <h1>{L10n[language].add_event}:</h1>
+
+        <div className="belowTitleContent">
+          <CreateEventForm
+            handleEvent={addEventHandler}
+            L10n={L10n}
+            language={language}
+            titleRef={title}
+            dateRef={date}
+            timeRef={time}
+            locationRef={location}
+            descriptionRef={description}
+            isAdd={true}
+          />
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

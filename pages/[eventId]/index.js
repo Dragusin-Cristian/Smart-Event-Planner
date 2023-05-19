@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import L10n from "../../L10n.json";
 import { LanguageContext } from "../../context/language-context";
 import { connectClient } from "../../utils/MongoDbUtils";
@@ -110,57 +111,66 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
 
 
   return (
+    <Fragment>
+      <Head>
+        <title>{eventDetails.title} Event</title>
+        <meta
+          name="description"
+          content={`All details about the ${eventDetails.title} event: ${description}`}>
+        </meta>
+      </Head>
 
-    <div>
-      <h1>{L10n[language].details_word}:</h1>
-      <div className="belowTitleContent">
-        <div className="halfOfFlex">
-          <div className="insideHalfOfFLex">
-            <ul>
-              <li>{L10n[language].title_word}: {eventDetails.title}</li>
-              <li>{L10n[language].author}: {isAuthor ? L10n[language].you_word : authorName}</li>
-              <li>{L10n[language].date_word}: {date}</li>
-              <li>{L10n[language].time_word}: {time}</li>
-              <li>{L10n[language].location_word}: {location}</li>
-              <li>{registeredUsersString}.</li>
-              <li>{L10n[language].description_word}:</li>
-            </ul>
-            <p>{description}</p>
+      <div>
+        <h1>{L10n[language].details_word}:</h1>
+        <div className="belowTitleContent">
+          <div className="halfOfFlex">
+            <div className="insideHalfOfFLex">
+              <ul>
+                <li>{L10n[language].title_word}: {eventDetails.title}</li>
+                <li>{L10n[language].author}: {isAuthor ? L10n[language].you_word : authorName}</li>
+                <li>{L10n[language].date_word}: {date}</li>
+                <li>{L10n[language].time_word}: {time}</li>
+                <li>{L10n[language].location_word}: {location}</li>
+                <li>{registeredUsersString}.</li>
+                <li>{L10n[language].description_word}:</li>
+              </ul>
+              <p>{description}</p>
 
-            {!isAuthor && authenticated && !eventRegistrationId && <button onClick={signupUpForEvent}>{L10n[language].Signup_for_event}</button>}
-            {!isAuthor && authenticated && eventRegistrationId && <button onClick={resignFromEvent}>{L10n[language].resign_from_event}</button>}
+              {!isAuthor && authenticated && !eventRegistrationId && <button onClick={signupUpForEvent}>{L10n[language].Signup_for_event}</button>}
+              {!isAuthor && authenticated && eventRegistrationId && <button onClick={resignFromEvent}>{L10n[language].resign_from_event}</button>}
+            </div>
           </div>
-        </div>
-        <hr />
-        <div className="halfOfFlex">
-          <div className="insideHalfOfFLex">
-            <div className="listScrollOverflow">
-              <h2>{L10n[language].comments_section}:</h2>
-              {comments.length === 0 ?
-                <p>{L10n[language].no_comments}</p>
-                : comments.map((comm, i) => {
-                  const isCommAuthor = comm.userId === session.data?.user.userId ? true : false
-                  const usernameText = isCommAuthor ? L10n[language].you_word : comm.userName
-                  return <Comment
-                    key={i}
-                    isCommAuthor={isCommAuthor}
-                    username={usernameText}
-                    text={comm.text}
-                    L10n={L10n}
-                    language={language}
-                    deleteComment={deleteComment}
-                    id={comm.id}
-                    authenticated={authenticated}
-                  />
-                })
-              }
-              <h3>{L10n[language].add_comment}:</h3>
-              <CommentsForm L10n={L10n} language={language} addComment={addComment} />
+          <hr />
+          <div className="halfOfFlex">
+            <div className="insideHalfOfFLex">
+              <div className="listScrollOverflow">
+                <h2>{L10n[language].comments_section}:</h2>
+                {comments.length === 0 ?
+                  <p>{L10n[language].no_comments}</p>
+                  : comments.map((comm, i) => {
+                    const isCommAuthor = comm.userId === session.data?.user.userId ? true : false
+                    const usernameText = isCommAuthor ? L10n[language].you_word : comm.userName
+                    return <Comment
+                      key={i}
+                      isCommAuthor={isCommAuthor}
+                      username={usernameText}
+                      text={comm.text}
+                      L10n={L10n}
+                      language={language}
+                      deleteComment={deleteComment}
+                      id={comm.id}
+                      authenticated={authenticated}
+                    />
+                  })
+                }
+                <h3>{L10n[language].add_comment}:</h3>
+                <CommentsForm L10n={L10n} language={language} addComment={addComment} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

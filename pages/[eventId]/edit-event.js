@@ -1,12 +1,13 @@
-import { useContext, useEffect, useRef } from "react";
+import { Fragment, useContext, useEffect, useRef } from "react";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import { connectClient } from "../../utils/MongoDbUtils";
 import { ObjectId } from "mongodb";
 import { LanguageContext } from "../../context/language-context";
 import L10n from "../../L10n.json";
-import CreateEventForm from "../../components/create or edit event/CreateEventForm";
 import axios from "axios";
+import CreateEventForm from "../../components/create or edit event/CreateEventForm";
 
 
 const EditEventPage = ({ eventDetails }) => {
@@ -50,22 +51,31 @@ const EditEventPage = ({ eventDetails }) => {
   }, [])
 
   return (
-    <div>
-      <h1>{L10n[language].edit_event}:</h1>
-      <div className="belowTitleContent">
-        <CreateEventForm
-          handleEvent={editEventHandler}
-          L10n={L10n}
-          language={language}
-          titleRef={title}
-          dateRef={date}
-          timeRef={time}
-          locationRef={location}
-          descriptionRef={description}
-          isAdd={false}
-        />
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Edit Event</title>
+        <meta
+          name="description"
+          content="Make changes to your event.">
+        </meta>
+      </Head>
+      <div>
+        <h1>{L10n[language].edit_event}:</h1>
+        <div className="belowTitleContent">
+          <CreateEventForm
+            handleEvent={editEventHandler}
+            L10n={L10n}
+            language={language}
+            titleRef={title}
+            dateRef={date}
+            timeRef={time}
+            locationRef={location}
+            descriptionRef={description}
+            isAdd={false}
+          />
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

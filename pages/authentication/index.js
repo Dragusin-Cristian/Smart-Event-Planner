@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, Fragment } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { getSession, signIn } from "next-auth/react";
 import L10n from "../../L10n.json";
 import { LanguageContext } from '../../context/language-context';
@@ -37,12 +38,21 @@ const AuthPage = () => {
   }
 
   return (
-    <div>
-      <h1>{L10n[language].authenticate_word}:</h1>
-      <div className="belowTitleContent">
-        <AuthForm language={language} handleAuth={handleAuth} L10n={L10n} />
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Authenticate</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to accessing a user's account."}>
+        </meta>
+      </Head>
+      <div>
+        <h1>{L10n[language].authenticate_word}:</h1>
+        <div className="belowTitleContent">
+          <AuthForm language={language} handleAuth={handleAuth} L10n={L10n} />
+        </div>
       </div>
-    </div>
+    </Fragment>
   )
 };
 

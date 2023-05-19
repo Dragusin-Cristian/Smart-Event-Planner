@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, Fragment } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import L10n from "../L10n.json";
 import { LanguageContext } from "../context/language-context";
@@ -43,11 +44,21 @@ export default function Home({ allEvents }) {
   }
 
   return (
-    <div>
-      <h1>{L10n[language].page_title}:</h1>
-      <Searchbar onSearch={searchHandler} language={language} value={searchQuery} L10n={L10n} />
-      <div className="belowTitleContent"><EventsList events={events} L10n={L10n} /></div>
-    </div>
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Home</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to viewing all events deshboard."}>
+        </meta>
+      </Head>
+
+      <div>
+        <h1>{L10n[language].page_title}:</h1>
+        <Searchbar onSearch={searchHandler} language={language} value={searchQuery} L10n={L10n} />
+        <div className="belowTitleContent"><EventsList events={events} L10n={L10n} /></div>
+      </div>
+    </Fragment>
   )
 }
 

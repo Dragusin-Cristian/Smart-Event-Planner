@@ -1,5 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, Fragment } from 'react';
 import Link from "next/link";
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getSession, signOut, useSession } from 'next-auth/react';
 import axios from 'axios';
@@ -50,26 +51,36 @@ const UserProfilePage = ({ profileEvents }) => {
   }
 
   return (
-    <div>
-      <h1>{L10n[language].Your_Profile}:</h1>
-      <div className="belowTitleContent">
-        <div className="halfOfFlex">
-          <div className="insideHalfOfFLex">
-            <p>{L10n[language].email_word}: {user.email}</p>
-            <p>{L10n[language].username}: {user.username}</p>
-            <Link className={classes.changePassBtn} href={`/profile/change-password?language=${language}`}><button>{L10n[language].Change_Password}</button></Link>
-            <button className={classes.deleteAccountBtn} onClick={handleDeleteAccount}>{L10n[language].delete_account}</button>
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Profile Details</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to viewing a user's account details."}>
+        </meta>
+      </Head>
+
+      <div>
+        <h1>{L10n[language].Your_Profile}:</h1>
+        <div className="belowTitleContent">
+          <div className="halfOfFlex">
+            <div className="insideHalfOfFLex">
+              <p>{L10n[language].email_word}: {user.email}</p>
+              <p>{L10n[language].username}: {user.username}</p>
+              <Link className={classes.changePassBtn} href={`/profile/change-password?language=${language}`}><button>{L10n[language].Change_Password}</button></Link>
+              <button className={classes.deleteAccountBtn} onClick={handleDeleteAccount}>{L10n[language].delete_account}</button>
+            </div>
           </div>
-        </div>
-        <hr />
-        <div className="halfOfFlex">
-          <div className="insideHalfOfFLex">
-            <h2>{L10n[language].your_events}:</h2>
-            <ProfileEventsList events={events} handleDelete={handleDeleteEvent} L10n={L10n} language={language} />
+          <hr />
+          <div className="halfOfFlex">
+            <div className="insideHalfOfFLex">
+              <h2>{L10n[language].your_events}:</h2>
+              <ProfileEventsList events={events} handleDelete={handleDeleteEvent} L10n={L10n} language={language} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

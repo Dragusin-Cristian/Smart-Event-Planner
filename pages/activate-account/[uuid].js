@@ -1,12 +1,24 @@
+import { Fragment } from "react";
+import Head from "next/head";
 import { connectClient } from "../../utils/MongoDbUtils";
 import L10n from "../../L10n.json";
 
 const ActivateAccountPage = ({ message }) => {
 
   return (
-    <div>
-      <h1>{message}.</h1>
-    </div>
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Account Activation Page</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to activating a user's account."}>
+        </meta>
+      </Head>
+
+      <div>
+        <h1>{message}.</h1>
+      </div>
+    </Fragment>
   );
 };
 

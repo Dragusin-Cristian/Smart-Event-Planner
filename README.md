@@ -31,7 +31,8 @@ Create a web application using Next.js that allows users to plan and manage even
 - [x] Email verification on signup/ Account activation through email token.
 ---
 
-- SEO
+- [x] SEO
+- Add tab icon
 - Handle errors and successes
 - do page generations right!
 

@@ -1,6 +1,7 @@
 
-import { useContext } from 'react';
+import { useContext, Fragment } from 'react';
 import { getSession } from 'next-auth/react';
+import Head from 'next/head';
 import L10n from "../../L10n.json";
 import axios from 'axios';
 import { LanguageContext } from "../../context/language-context";
@@ -24,13 +25,22 @@ const ChangePasswordPage = () => {
   }
 
   return (
-    <div>
-      <h1>{L10n[language].change_your_password}:</h1>
-      <div className="belowTitleContent">
-        <ChangePasswordForm language={language} L10n={L10n} handlePasswordChange={handlePasswordChange} />
-      </div>
-    </div>
+    <Fragment>
+      <Head>
+        <title>Smart Event Planner: Change your password</title>
+        <meta
+          name="description"
+          content={"This page is dedicated to changing a user's password."}>
+        </meta>
+      </Head>
 
+      <div>
+        <h1>{L10n[language].change_your_password}:</h1>
+        <div className="belowTitleContent">
+          <ChangePasswordForm language={language} L10n={L10n} handlePasswordChange={handlePasswordChange} />
+        </div>
+      </div>
+    </Fragment>
   )
 };
 
