@@ -1,0 +1,214 @@
+html,
+body {
+  padding: 0;
+  margin: 0 0 10px;
+  width: 100%;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+* {
+  font-weight: 100;
+  box-sizing: border-box;
+}
+
+*::selection{
+  background-color: rgb(255, 0, 0);
+  color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+.pageContent{
+  margin: 0 30px;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p {
+  line-height: 1.8em;
+}
+
+button, input{
+  background-color: transparent;
+  border: 1px solid white;
+  padding: 7px 0px;
+}
+
+input{
+  flex-grow: 1;
+  max-width: 600px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+input, textarea{
+  background-color: #1F1F1F;
+}
+
+textarea{
+  display: block;
+  width: 100%;
+  margin: 20px auto;
+  height: 150px;
+  padding: 10px;
+}
+
+button {
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+button:hover{
+  background-color: white;
+  color: black;
+}
+
+label{
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+h1{
+  font-weight: normal;
+  font-size: 5.8em;
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
+}
+
+h2, h3{
+  font-weight: normal;
+  margin-top: 0;
+}
+
+h3{
+  font-size: 1.5em;
+  margin-bottom: 0px;
+}
+
+li:not(:first-child) {
+  margin-top: 15px;
+}
+
+.belowTitleContent{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.halfOfFlex{
+  width: 100%;
+}
+
+.insideHalfOfFLex{
+  margin: auto;
+  width:80%;
+}
+
+.Card{
+  background-color: #1F1F1F;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.CardContent{
+  width: 100%;
+}
+
+.EventCardTitle{
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.CardEvent{
+  padding: 30px 60px;
+}
+
+/* .listScrollOverflow{
+  height: 100%;
+  overflow-y: scroll;
+} */
+
+.labelInputContainer{
+  display: flex;
+  margin-bottom: 5px;
+}
+
+
+.blured{
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+/** TABLET WIDTH: */
+
+@media (max-width: 900px){
+  h1{
+    margin: 50px auto;
+    font-size: 3em;
+  }
+
+  label{
+    margin-bottom: 10px;
+  }
+  
+  .belowTitleContent{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Card{
+    margin-bottom: 20px;
+  }
+}
+
+/** PHONE WIDTH: */
+
+
+@media (max-width: 400px) {
+  html, body, #__next{
+    width: 100vw;
+  }
+
+  label{
+    margin-right: 10px;
+  }
+
+  .labelInputContainer{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+ }
+
+  .Card{
+    margin-bottom: 20px;
+  }
+
+  /* .belowTitleContent{
+    display: block;
+  } */
+}

@@ -1,0 +1,21 @@
+.ErrorP{
+  color: red;
+}
+
+.ChangeFormTypeA{
+  cursor: pointer;
+}
+
+.form{
+  width: 100%;
+}
+
+.formContainer{
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.authBtn{
+  margin-top: 20px;
+}

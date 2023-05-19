@@ -1,0 +1,16 @@
+.CardComment{
+  padding: 15px 30px;
+  margin-bottom: 20px;
+}
+
+.commContentP{
+  margin-bottom: 0px;;
+}
+
+.deleteCommBtn{
+  margin-top: 15px;
+}
+
+.commentsForm{
+  display: block;
+}

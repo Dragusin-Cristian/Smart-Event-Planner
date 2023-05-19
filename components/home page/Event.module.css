@@ -1,0 +1,24 @@
+.DescrPara{
+  height: 115px;
+  overflow: hidden;
+}
+
+.CardsList{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 40px;
+}
+
+@media (max-width: 400px){
+  .DescrPara{
+    display: none;
+  }
+}
+
+@media (max-width: 900px){
+  .CardsList{
+    display: block;
+  }
+}
+

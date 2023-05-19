@@ -1,0 +1,76 @@
+.NavbarContainer{
+  margin: 0;
+  padding: 10px 30px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  background-color: black;
+}
+
+.navBarControlsContainer, .hiddenNavBarControlsContainer{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.burgerContainer{
+  display: none;
+}
+
+
+.flexContainer{
+  display: flex;
+  align-items: center;
+}
+
+.NavbarLink{
+  margin: 0 60px 0 0;
+  width: fit-content;
+  /* font-size: 1.1em; */
+}
+
+.burgerIc{
+  display: none;
+}
+
+.LogoutButton{
+  margin-right: 40px;
+}
+
+@media (max-width: 900px) {
+  .NavbarContainer{
+    background-color: transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .navBarControlsContainer{
+    display: block;
+  }
+
+  .burgerContainer{
+    display: block;
+    background-color: black;
+    width: 100%;
+    top: 0;
+    padding: 10px 0;
+  }
+
+  .hiddenNavBarControlsContainer{
+    display: none;
+  }
+
+  .flexContainer{
+    display: block;
+  }
+
+  .burgerIc{
+    display: block;
+  }
+
+  .LogoutButton{
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+}

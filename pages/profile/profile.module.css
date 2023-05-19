@@ -1,0 +1,13 @@
+.changePassBtn{
+ display: block;
+ margin-bottom: 10px; 
+}
+
+.deleteAccountBtn{
+  border-color: red;
+  color: red;
+}
+
+.deleteAccountBtn:hover{
+  background-color: red;
+}
