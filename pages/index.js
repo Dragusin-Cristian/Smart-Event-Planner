@@ -64,6 +64,8 @@ export default function Home({ allEvents, dbError }) {
   )
 }
 
+// Let's imagine we have A LOT of requests, HUGE TRAFFIC.
+// For this, our server has to be protected from overgenerating the same page more then what is needed.
 export async function getStaticProps() {
   try {
     const client = await connectClient();
@@ -74,6 +76,7 @@ export async function getStaticProps() {
 
     client.close();
     return {
+      revalidate: 3000, // every 5 minutes
       props: {
         allEvents: events.length ? events.map(e => ({
           id: e._id.toString(),

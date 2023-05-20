@@ -18,6 +18,16 @@ async function handler(req, res) {
 
   const { eventId, eventName, date, time, location, description, authorId } = req.body;
 
+  if (!eventId || eventId.trim().length === 0 ||
+    !date || date.trim().length === 0 ||
+    !time || time.trim().length === 0 ||
+    !location || location.trim().length === 0 ||
+    !description || description.trim().length === 0 ||
+    !authorId || authorId.trim().length === 0) {
+    res.status(403).json({ message: "Cannot upload empty data." })
+    return;
+  }
+
   // check if user is the author:
   if (authorId === currentUserId) {
     res.status(403).json({ message: "Authors cannot signup for their own events!" });
@@ -55,7 +65,7 @@ async function handler(req, res) {
 
   res.status(201).json({ message: "Event signup succeeded!", newRegistration: newRegistration });
 
-  
+
 
   const icsContent = `BEGIN:VCALENDAR
   VERSION:2.0

@@ -10,7 +10,7 @@ import axios from "axios";
 import CommentsForm from "../../components/event details/CommentsForm";
 import Comment from "../../components/event details/Comment";
 
-const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
+const EventDetailsPage = ({ eventDetails }) => {
 
   const session = useSession();
   const { language } = useContext(LanguageContext);
@@ -21,9 +21,9 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
   const [isLoadingComment, setIsLoadingComment] = useState(false);
   const [errorEventRegistration, setErrorEventRegistration] = useState(null);
   const [errorComment, setErrorComment] = useState(null);
-  const { id: eventId, title, date, description, location, time, authorName, authorId, registrations: propsRegistrations } = eventDetails;
-  const [registrations, setRegistrations] = useState(propsRegistrations)
-  const [comments, setComments] = useState(commentsProps);
+  const { id: eventId, title, date, description, location, time, authorName, authorId } = eventDetails;
+  const [registrations, setRegistrations] = useState([])
+  const [comments, setComments] = useState([]);
   const isAuthor = session.data?.user.userId === authorId;
 
   const signupUpForEvent = async () => {
@@ -89,6 +89,23 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
     }
   }
 
+
+  useEffect(() => {
+    const execute = async () => {
+      const [commentsP, registrationsP] = await Promise.all([
+        axios.get(`/api/events/get-event-comments?eventId=${eventId}`),
+        axios.get(`/api/events/get-event-registrations?eventId=${eventId}`),
+      ]);
+
+      console.log(commentsP, registrationsP);
+
+      setRegistrations(registrationsP.data.registrations);
+      setComments(commentsP.data.comments);
+    }
+
+    execute();
+  }, [])
+
   useEffect(() => {
     setAuthenticated(checkIfSessionAuthenticated(session));
 
@@ -113,7 +130,6 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
 
     (usersString !== registeredUsersString) && setRegisteredUsersString(usersString)
   }, [session, registrations])
-
 
   return (
     <Fragment>
@@ -203,13 +219,7 @@ export async function getStaticProps(context) {
   const db = client.db();
 
   const eventsCollection = db.collection("events");
-  const registrationsCollection = db.collection("registrations");
-  const commentsCollection = db.collection("comments");
-
   const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) })
-
-  const registrations = await registrationsCollection.find({ eventId: eventId }).project({ eventId: 0 }).toArray();
-  const comments = await commentsCollection.find({ eventId: eventId }).project({ usersString: 0, eventId: 0 }).toArray();
   client.close();
 
   return {
@@ -223,19 +233,7 @@ export async function getStaticProps(context) {
         description: event.description,
         authorName: event.authorName,
         authorId: event.authorId,
-        registrations: registrations ? registrations.map(reg => ({
-          signedUserName: reg.signedUserName,
-          signedUserId: reg.signedUserId,
-          date: reg.date.toString(),
-          _id: reg._id.toString()
-        })) : []
-      },
-      comments: comments ? comments.map(comm => ({
-        id: comm._id.toString(),
-        text: comm.text,
-        userName: comm.userName,
-        userId: comm.userId
-      })) : []
+      }
     }
   }
 }

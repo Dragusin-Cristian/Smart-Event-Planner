@@ -36,11 +36,23 @@ async function handler(req, res) {
 
   const currentPassword = user.password;
 
-  const passwordAreEqual = await verifyPassword(oldPassword, currentPassword);
+  const passwordsAreEqual = await verifyPassword(oldPassword, currentPassword);
 
-  if (!passwordAreEqual) {
-    res.status(403).json({ message: "Invalid password" }); // 403: you are authenticated but not authorized
+  if (!passwordsAreEqual) {
+    res.status(403).json({ message: "The password you entered is wrong, cannot authorize using this password." });
     client.close();
+    return;
+  }
+
+  if(!oldPassword || oldPassword.trim().length === 0 || !newPassword || newPassword.trim().length === 0){
+    res.status(403).json({message: "Entered password is not valid."});
+    client.close()
+    return;
+  }
+
+  if(oldPassword === newPassword){
+    res.status(403).json({message: "The new password is the same as the old one."});
+    client.close()
     return;
   }
 

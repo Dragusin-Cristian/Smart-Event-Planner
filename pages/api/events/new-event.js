@@ -18,6 +18,17 @@ async function handler(req, res) {
 
   const { title, date, time, location, description, authorId, authorName } = req.body;
 
+  if (!title || title.trim().length === 0 ||
+    !date || date.trim().length === 0 ||
+    !time || time.trim().length === 0 ||
+    !location || location.trim().length === 0 ||
+    !description || description.trim().length === 0 ||
+    !authorId || authorId.trim().length === 0 ||
+    !authorName || authorName.trim().length === 0) {
+    res.status(403).json({ message: "Cannot upload empty data." })
+    return;
+  }
+
   const client = await connectClient();
   const db = client.db();
 

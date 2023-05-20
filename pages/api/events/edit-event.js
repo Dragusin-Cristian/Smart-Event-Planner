@@ -17,6 +17,17 @@ async function handler(req, res) {
   const { eventId } = req.query;
   const { title, date, time, location, description, authorId, authorName } = req.body;
 
+  if (!title || title.trim().length === 0 ||
+    !date || date.trim().length === 0 ||
+    !time || time.trim().length === 0 ||
+    !location || location.trim().length === 0 ||
+    !description || description.trim().length === 0 ||
+    !authorId || authorId.trim().length === 0 ||
+    !authorName || authorName.trim().length === 0) {
+      res.status(403).json({message: "Cannot upload empty data."})
+      return;
+  }
+
   const client = await connectClient();
   const db = client.db();
   const eventsCollection = db.collection("events");
@@ -24,8 +35,6 @@ async function handler(req, res) {
   const usersCollection = db.collection("users");
 
   const existingEvent = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-
-  console.log(existingEvent);
 
   if (!existingEvent) {
     res.status(404).json({ message: "The event you are trying to edit doesn't appear to exist." });

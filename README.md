@@ -32,14 +32,12 @@ Create a web application using Next.js that allows users to plan and manage even
 ---
 
 - [x] SEO
-- Handle errors and successes
-- check if passed objects are undefined or null
-- check if trimmed new password is not empty && if oldPass and newPass are not the same 
-- surround all APIs with try catch and return 500
-- Add translations for server messages
-- make unavailable dates before current date. (from BE)
-- Add tab icon
-- do page generations right!
+- [x] Handle errors and successes
+- [x] check if passed objects are undefined or null
+- [x] check if trimmed new password is not empty && if oldPass and newPass are not the same
+- make unavailable dates before current date. (from BE and FE)
+- [x] Add tab icon
+- [x] do page generations right!
 - Optimise DB Access
 
 

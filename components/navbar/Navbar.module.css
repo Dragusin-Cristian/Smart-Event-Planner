@@ -28,7 +28,13 @@
 .NavbarLink{
   margin: 0 60px 0 0;
   width: fit-content;
-  /* font-size: 1.1em; */
+  font-size: 1.1em;
+  padding: 5px 10px;
+}
+
+.NavbarLink:hover, .NavbarLink:active{
+  background-color: white;
+  color: black;
 }
 
 .burgerIc{

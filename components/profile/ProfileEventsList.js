@@ -7,6 +7,7 @@ const ProfileEventsList = ({ events, handleDelete, L10n, language }) => {
       {events?.map((e, i) => {
         return (
           <ProfileEvent
+            key={i}
             title={e.title}
             date={e.date}
             time={e.time}

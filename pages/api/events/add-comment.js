@@ -20,6 +20,11 @@ async function handler(req, res) {
 
   const { comment, eventId } = req.body;
 
+  if(!comment || comment.trim().length === 0 || !eventId || eventId.trim().length === 0){
+    res.status(403).json({message: "Cannot upload invalid comments."})
+    return;
+  }
+
   const client = await connectClient();
   const db = client.db();
 
