@@ -10,12 +10,13 @@ import classes from "./profile.module.css";
 import { LanguageContext } from '../../context/language-context';
 import ProfileEventsList from '../../components/profile/ProfileEventsList';
 
-
 const UserProfilePage = ({ profileEvents }) => {
   const router = useRouter();
   const { language } = useContext(LanguageContext);
   const session = useSession();
   const [events, setEvents] = useState(profileEvents);
+  const [accDelError, setAccDelError] = useState(null);
+  const [accDelIsLoading, setAccDelIsLoading] = useState(false);
 
   if (!session.data) {
     return <p>Loading...</p>
@@ -23,30 +24,28 @@ const UserProfilePage = ({ profileEvents }) => {
 
   const { user } = session.data;
 
-  const handleDeleteEvent = async (id) => {
+  const handleDeleteEvent = async (id, setEventLoading, setEventError) => {
+    setEventLoading(true)
     try {
-      const response = await axios.delete(`/api/events/delete-event?eventId=${id}`);
+      await axios.delete(`/api/events/delete-event?eventId=${id}`);
       setEvents(oldState => oldState.filter(e => e.id !== id));
-      //TODO: handle success
-      console.log(response);
+      setEventError(null)
+      setEventLoading(false)
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setEventError(e.response.data.message || e.response.statusText)
+      setEventLoading(false)
     }
   }
 
   const handleDeleteAccount = async () => {
+    setAccDelIsLoading(true)
     try {
-      const response = await axios.delete("/api/auth/delete-account");
-      //TODO: handle success
-      console.log(response);
-      if (response.status === 200) {
-        signOut();
-        router.replace(`/authentication?language=${language}`);
-      }
+      await axios.delete("/api/auth/delete-account");
+      signOut();
+      router.replace(`/authentication?language=${language}`);
     } catch (e) {
-      //TODO: Handle error
-      console.log(e);
+      setAccDelIsLoading(false)
+      setAccDelError(e.response.data.message || e.response.statusText)
     }
   }
 
@@ -68,7 +67,8 @@ const UserProfilePage = ({ profileEvents }) => {
               <p>{L10n[language].email_word}: {user.email}</p>
               <p>{L10n[language].username}: {user.username}</p>
               <Link className={classes.changePassBtn} href={`/profile/change-password?language=${language}`}><button>{L10n[language].Change_Password}</button></Link>
-              <button className={classes.deleteAccountBtn} onClick={handleDeleteAccount}>{L10n[language].delete_account}</button>
+              { !accDelIsLoading ? <button className={classes.deleteAccountBtn} onClick={handleDeleteAccount}>{L10n[language].delete_account}</button> : <p>{L10n[language].loading}...</p>}
+              {accDelError && <p className="error">{accDelError}</p>}
             </div>
           </div>
           <hr />

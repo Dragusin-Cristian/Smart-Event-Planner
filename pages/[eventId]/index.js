@@ -17,12 +17,17 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
   const [eventRegistrationId, setEventRegistrationId] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [registeredUsersString, setRegisteredUsersString] = useState(L10n[language].No_users_signedup);
+  const [isLoadingEventRegistration, setIsLoadingEventRegistration] = useState(false);
+  const [isLoadingComment, setIsLoadingComment] = useState(false);
+  const [errorEventRegistration, setErrorEventRegistration] = useState(null);
+  const [errorComment, setErrorComment] = useState(null);
   const { id: eventId, title, date, description, location, time, authorName, authorId, registrations: propsRegistrations } = eventDetails;
   const [registrations, setRegistrations] = useState(propsRegistrations)
   const [comments, setComments] = useState(commentsProps);
   const isAuthor = session.data?.user.userId === authorId;
 
   const signupUpForEvent = async () => {
+    setIsLoadingEventRegistration(true)
     try {
       const response = await axios.post("/api/events/signup-for-event", {
         eventId: eventId,
@@ -36,51 +41,51 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
       const { newRegistration } = response.data
       setEventRegistrationId(newRegistration._id);
       setRegistrations(oldState => oldState.concat(newRegistration))
-      //TODO: handle success
-      console.log(response);
+      setIsLoadingEventRegistration(false)
+      setErrorEventRegistration(null)
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setErrorEventRegistration(e.response.data.message || e.response.statusText)
+      setIsLoadingEventRegistration(false)
     }
   }
 
   const resignFromEvent = async () => {
+    setIsLoadingEventRegistration(true)
     try {
-      const response = await axios.delete(`/api/events/resign-from-event?registrationId=${eventRegistrationId}`)
-      console.log(response);
-      //TODO: handle success
+      await axios.delete(`/api/events/resign-from-event?registrationId=${eventRegistrationId}`)
       setEventRegistrationId(null);
       setRegistrations(oldState => oldState.filter(r => r._id != eventRegistrationId));
+      setIsLoadingEventRegistration(false)
+      setErrorEventRegistration(null)
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setErrorEventRegistration(e.response.data.message || e.response.statusText)
+      setIsLoadingEventRegistration(false)
     }
   }
 
   const addComment = async (comment) => {
+    setIsLoadingComment(true)
     try {
       const response = await axios.post("/api/events/add-comment", { comment, eventId })
-      console.log(response);
-      //TODO: handle success
-      if (response.status === 201) {
-        setComments(oldState => oldState.concat(response.data.addedComment))
-      }
+      setComments(oldState => oldState.concat(response.data.addedComment))
+      setIsLoadingComment(false)
+      setErrorComment(null)
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setIsLoadingComment(false)
+      setErrorComment(e.response.data.message || e.response.statusText)
     }
   }
 
-  const deleteComment = async (commentId) => {
+  const deleteComment = async (commentId, setIsLoadingCommentDelete, setErrorCommentDelete) => {
+    setIsLoadingCommentDelete(true);
     try {
-      const response = await axios.delete(`/api/events/delete-comment?commentId=${commentId}`);
-      //TODO: handle success
-      if (response.status === 200) {
-        setComments(oldState => oldState.filter(comm => comm.id != commentId))
-      }
+      await axios.delete(`/api/events/delete-comment?commentId=${commentId}`);
+      setComments(oldState => oldState.filter(comm => comm.id != commentId))
+      setIsLoadingCommentDelete(false)
+      setErrorCommentDelete(null)
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setErrorCommentDelete(e.response.data.message || e.response.statusText)
+      setIsLoadingCommentDelete(false)
     }
   }
 
@@ -136,8 +141,9 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
               </ul>
               <p>{description}</p>
 
-              {!isAuthor && authenticated && !eventRegistrationId && <button onClick={signupUpForEvent}>{L10n[language].Signup_for_event}</button>}
-              {!isAuthor && authenticated && eventRegistrationId && <button onClick={resignFromEvent}>{L10n[language].resign_from_event}</button>}
+              {!isAuthor && authenticated && !eventRegistrationId && (!isLoadingEventRegistration ? <button onClick={signupUpForEvent}>{L10n[language].Signup_for_event}</button> : <p>{L10n[language].loading}...</p>)}
+              {!isAuthor && authenticated && eventRegistrationId && (!isLoadingEventRegistration ? <button onClick={resignFromEvent}>{L10n[language].resign_from_event}</button> : <p>{L10n[language].loading}...</p>)}
+              {errorEventRegistration && <p className="error">{errorEventRegistration}</p>}
             </div>
           </div>
           <hr />
@@ -157,14 +163,15 @@ const EventDetailsPage = ({ eventDetails, comments: commentsProps }) => {
                       text={comm.text}
                       L10n={L10n}
                       language={language}
-                      deleteComment={deleteComment}
                       id={comm.id}
                       authenticated={authenticated}
+                      setComments={setComments}
+                      deleteComment={deleteComment}
                     />
                   })
                 }
                 <h3>{L10n[language].add_comment}:</h3>
-                <CommentsForm L10n={L10n} language={language} addComment={addComment} />
+                <CommentsForm isLoadingComment={isLoadingComment} L10n={L10n} language={language} addComment={addComment} errorComment={errorComment} />
               </div>
             </div>
           </div>

@@ -49,7 +49,9 @@
     "change_your_password": "Change your password",
     "Search_for_event": "Search for event",
     "See_you_there": "SEE YOU THERE",
-    "your_events": "Your events"
+    "your_events": "Your events",
+    "loading": "Loading",
+    "account_created_text": "Your account was created. Check your email for activation link, THEN, you may log in! (Make sure to also check your spam folder.)"
   },
   "ro": {
     "page_title": "Toate evenimentele",
@@ -101,6 +103,8 @@
     "change_your_password": "Schimba-ti parola",
     "Search_for_event": "Cauta evenimentul",
     "See_you_there": "NE VEDEM ACOLO",
-    "your_events": "Evenimentele tale"
+    "your_events": "Evenimentele tale",
+    "loading": "Incarcare",
+    "account_created_text": "Contul tau a fost creat cu succes. Verifica-ti contul de email pentru linkul de activare, APOI, poti sa te loghezi! (Verifica si folderul de spam.)"
   }
 }

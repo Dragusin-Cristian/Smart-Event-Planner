@@ -5,7 +5,7 @@ const EventsList = ({ events, L10n }) => {
   return (
     <div className={classes.CardsList}>
       {events.map((event, index) => {
-        return <Event {...event} L10n={L10n} />
+        return <Event key={index} {...event} L10n={L10n} />
       })}
     </div>
   );

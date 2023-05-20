@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useRef } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -11,6 +11,8 @@ import CreateEventForm from "../../components/create or edit event/CreateEventFo
 
 
 const EditEventPage = ({ eventDetails }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const session = useSession();
   const title = useRef();
   const date = useRef();
@@ -21,6 +23,8 @@ const EditEventPage = ({ eventDetails }) => {
   const router = useRouter();
 
   const editEventHandler = async () => {
+    setIsLoading(true);
+    
     const newEvent = {
       title: title.current.value,
       date: date.current.value,
@@ -32,14 +36,12 @@ const EditEventPage = ({ eventDetails }) => {
     }
 
     try {
-      const response = await axios.patch(`/api/events/edit-event?eventId=${eventDetails.id}`, newEvent);
-      console.log(response);
+      await axios.patch(`/api/events/edit-event?eventId=${eventDetails.id}`, newEvent);
+      router.push(`/?language=${language}`);
     } catch (e) {
-      //TODO: handle error
-      console.log(e);
+      setError(e.response.data.message || e.response.statusText)
+      setIsLoading(false)
     }
-
-    router.push(`/?language=${language}`);
   }
 
   useEffect(() => {
@@ -72,6 +74,9 @@ const EditEventPage = ({ eventDetails }) => {
             locationRef={location}
             descriptionRef={description}
             isAdd={false}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            error={error}
           />
         </div>
       </div>

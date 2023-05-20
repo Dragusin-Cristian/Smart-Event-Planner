@@ -1,4 +1,4 @@
-import { useContext, useRef, Fragment } from "react";
+import { useContext, useRef, Fragment, useState } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -16,6 +16,8 @@ const CreateEventPage = () => {
   const location = useRef();
   const description = useRef();
   const { language } = useContext(LanguageContext);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
   const router = useRouter();
 
   const addEventHandler = async () => {
@@ -28,8 +30,14 @@ const CreateEventPage = () => {
       authorId: session.data.user.userId,
       authorName: session.data.user.username
     }
-    await axios.post("/api/events/new-event", newEvent);
-    router.push(`/?language=${language}`);
+
+    try {
+      await axios.post("/api/events/new-event", newEvent);
+      router.push(`/?language=${language}`);
+    } catch (e) {
+      setIsLoading(false)
+      setError(e.response.data.message || e.response.statusText)
+    }
   }
 
   return (
@@ -56,6 +64,9 @@ const CreateEventPage = () => {
             locationRef={location}
             descriptionRef={description}
             isAdd={true}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            error={error}
           />
         </div>
       </div>

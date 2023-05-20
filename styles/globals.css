@@ -105,6 +105,12 @@ li:not(:first-child) {
   margin-top: 15px;
 }
 
+.error{
+  color: red;
+}
+
+
+
 .belowTitleContent{
   display: flex;
   justify-content: center;

@@ -23,8 +23,9 @@ async function handler(req, res) {
   const registrationsCollection = db.collection("registrations");
   const usersCollection = db.collection("users");
 
-  // check if the user is authorized to delete this event (must it's own):
   const existingEvent = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+
+  console.log(existingEvent);
 
   if (!existingEvent) {
     res.status(404).json({ message: "The event you are trying to edit doesn't appear to exist." });
@@ -32,6 +33,7 @@ async function handler(req, res) {
     return;
   }
 
+  // check if the user is authorized to delete this event (must it's own):
   if (existingEvent.authorId !== currentUserId) {
     res.status(401).json({ message: "You can only edit your own events!" });
   } else {

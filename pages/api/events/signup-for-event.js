@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import { connectClient } from "../../../utils/MongoDbUtils";
-import { ics } from "calendar-link";
+// import { ics } from "calendar-link";
 import { sendEventSignUpMail } from "../../../utils/mailUtils";
 import dateFormat from "dateformat";
 
@@ -38,7 +38,6 @@ async function handler(req, res) {
     client.close();
     return;
   }
-
 
   // signup the user for the event:
   const newRegistration = {

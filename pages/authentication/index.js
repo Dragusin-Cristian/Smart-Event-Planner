@@ -1,4 +1,4 @@
-import { useContext, Fragment } from 'react';
+import { useContext, Fragment, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { getSession, signIn } from "next-auth/react";
@@ -8,32 +8,38 @@ import AuthForm from '../../components/auth/AuthForm';
 import axios from 'axios';
 
 const AuthPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLogin, setIsLogin] = useState(true);
+  const [message, setMessage] = useState(null); // used when signup is successful
   const router = useRouter();
   const language = useContext(LanguageContext).language;
 
   const handleAuth = async (email, pass, isLogin, username) => {
     if (!isLogin) {
       try {
-        const response = await axios.post("/api/auth/signup", { email: email, password: pass, username: username });
-        //TODO Handle success:
-        console.log("Success, " + response.data.message);
-      } catch (error) {
-        //TODO handle errors:
-        console.log(error.response.data.message);
+        await axios.post("/api/auth/signup", { email: email, password: pass, username: username });
+        setIsLoading(false);
+        setIsLogin(true);
+        setError(null);
+        setMessage(L10n[language].account_created_text)
+      } catch (e) {
+        setError(e.response.data.message || e.response.statusText);
+        setIsLoading(false);
       }
     } else {
-      const result = await signIn("credentials", {
+
+      const response = await signIn("credentials", {
         redirect: false,
         email: email,
         password: pass
       });
-      //TODO: handle success and errors:
-      console.log(result);
-
-      if (result.ok) {
+      if (response.ok) {
         router.replace(`/?language=${language}`);
+      }else{
+        setError(response.error);
+        setIsLoading(false);
       }
-
     }
   }
 
@@ -49,7 +55,7 @@ const AuthPage = () => {
       <div>
         <h1>{L10n[language].authenticate_word}:</h1>
         <div className="belowTitleContent">
-          <AuthForm language={language} handleAuth={handleAuth} L10n={L10n} />
+          <AuthForm message={message} isLogin={isLogin} setIsLogin={setIsLogin} isLoading={isLoading} setIsLoading={setIsLoading} error={error} setError={setError} language={language} handleAuth={handleAuth} L10n={L10n} />
         </div>
       </div>
     </Fragment>

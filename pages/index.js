@@ -7,7 +7,7 @@ import EventsList from '../components/home page/EventsList'
 import Searchbar from '../components/home page/Searchbar'
 import { connectClient } from "../utils/MongoDbUtils";
 
-export default function Home({ allEvents }) {
+export default function Home({ allEvents, dbError }) {
   const { language } = useContext(LanguageContext);
   const [events, setEvents] = useState(allEvents || []);
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,33 +56,43 @@ export default function Home({ allEvents }) {
       <div>
         <h1>{L10n[language].page_title}:</h1>
         <Searchbar onSearch={searchHandler} language={language} value={searchQuery} L10n={L10n} />
-        <div className="belowTitleContent"><EventsList events={events} L10n={L10n} /></div>
+        <div className="belowTitleContent">
+          {dbError ? <p className="error">{L10n[language].error}</p> : <EventsList events={events} L10n={L10n} />}
+        </div>
       </div>
     </Fragment>
   )
 }
 
 export async function getStaticProps() {
+  try {
+    const client = await connectClient();
+    const db = client.db();
 
-  const client = await connectClient();
-  const db = client.db();
+    const eventsCollection = db.collection("events");
+    const events = await eventsCollection.find().toArray();
 
-  const eventsCollection = db.collection("events");
-  const events = await eventsCollection.find().toArray();
-
-  client.close();
-  return {
-    props: {
-      allEvents: events.length ? events.map(e => ({
-        id: e._id.toString(),
-        title: e.title,
-        date: e.date,
-        time: e.time,
-        location: e.location,
-        description: e.description,
-        authorId: e.authorId,
-        authorName: e.authorName
-      })) : []
+    client.close();
+    return {
+      props: {
+        allEvents: events.length ? events.map(e => ({
+          id: e._id.toString(),
+          title: e.title,
+          date: e.date,
+          time: e.time,
+          location: e.location,
+          description: e.description,
+          authorId: e.authorId,
+          authorName: e.authorName
+        })) : []
+      }
+    }
+  } catch (e) {
+    return {
+      props: {
+        dbError: true
+      }
     }
   }
+
 }

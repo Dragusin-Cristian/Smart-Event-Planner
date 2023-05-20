@@ -1,7 +1,7 @@
 import classes from "./CreateEventForm.module.css";
 
 const CreateEventForm = ({ handleEvent, L10n, language, titleRef,
-  timeRef, dateRef, locationRef, descriptionRef, isAdd }) => {
+  timeRef, dateRef, locationRef, descriptionRef, isAdd, isLoading, error }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -30,7 +30,20 @@ const CreateEventForm = ({ handleEvent, L10n, language, titleRef,
         <label htmlFor="description">{L10n[language].description_word}:</label>
         <textarea className={classes.createEventInput} name="description" type="text" required ref={descriptionRef} />
       </div>
-      <button>{isAdd ? L10n[language].add_event : L10n[language].edit_event}</button>
+      {!isLoading
+        ?
+        <button>
+          {isAdd
+            ?
+            L10n[language].add_event
+            :
+            L10n[language].edit_event
+          }
+        </button>
+        :
+        <p>{L10n[language].loading}...</p>
+      }
+      {!isLoading && <p className={error ? "error" : ""}>{error}</p>}
     </form>
   );
 };
