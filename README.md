@@ -31,14 +31,13 @@ Create a web application using Next.js that allows users to plan and manage even
 - [x] Email verification on signup/ Account activation through email token.
 ---
 
-- [x] SEO
+- [x] SEO Head
 - [x] Handle errors and successes
 - [x] check if passed objects are undefined or null
 - [x] check if trimmed new password is not empty && if oldPass and newPass are not the same
-- make unavailable dates before current date. (from BE and FE)
+- [x] make unavailable dates before current date. (from BE and FE)
 - [x] Add tab icon
-- [x] do page generations right!
-- Optimise DB Access
+- [x] do page generations right! 
 
 
 

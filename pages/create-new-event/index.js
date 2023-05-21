@@ -21,6 +21,7 @@ const CreateEventPage = () => {
   const router = useRouter();
 
   const addEventHandler = async () => {
+    setIsLoading(true)
     const newEvent = {
       title: title.current.value,
       date: date.current.value,

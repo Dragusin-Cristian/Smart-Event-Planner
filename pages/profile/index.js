@@ -1,4 +1,4 @@
-import { useContext, useState, Fragment, useEffect } from 'react';
+import { useContext, useState, Fragment, useEffect, isValidElement } from 'react';
 import Link from "next/link";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -95,7 +95,13 @@ const UserProfilePage = () => {
               <h2>{L10n[language].your_events}:</h2>
               {eventsAreLoading && <p>{L10n[language].loading}...</p>}
               {fetchEventsError && <p className="error">{fetchEventsError}</p>}
-              <ProfileEventsList events={events} handleDelete={handleDeleteEvent} L10n={L10n} language={language} />
+              {!eventsAreLoading && (events.length
+                ?
+                <ProfileEventsList events={events} handleDelete={handleDeleteEvent} L10n={L10n} language={language} />
+                :
+                <p>{L10n[language].no_events_profile}</p>
+                )
+              }
             </div>
           </div>
         </div>

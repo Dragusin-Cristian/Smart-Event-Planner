@@ -16,7 +16,7 @@ const CreateEventForm = ({ handleEvent, L10n, language, titleRef,
       </div>
       <div className="labelInputContainer">
         <label htmlFor="date">{L10n[language].date_word}:</label>
-        <input className={classes.createEventInput} name="date" type="date" required ref={dateRef} />
+        <input className={classes.createEventInput} name="date" type="date" min={new Date().toISOString().split('T')[0]} required ref={dateRef} />
       </div>
       <div className="labelInputContainer">
         <label htmlFor="time">{L10n[language].time_word}:</label>

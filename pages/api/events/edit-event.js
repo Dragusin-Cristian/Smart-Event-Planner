@@ -28,6 +28,15 @@ async function handler(req, res) {
       return;
   }
 
+  const currentDate = new Date();
+  const newDate = new Date(date + "T" + time + ":00");
+  currentDate.setDate(currentDate.getDate() + 1)
+
+  if(currentDate > newDate){
+    res.status(403).json({message: "Events must be planned with at least 24 hours before."})
+    return;
+  }
+
   const client = await connectClient();
   const db = client.db();
   const eventsCollection = db.collection("events");
