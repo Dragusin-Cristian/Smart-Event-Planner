@@ -1,4 +1,4 @@
-# Project Title: "Event Planner"
+# Project Title: "Smart Event Planner"
 
 ## Project Description:
 Create a web application using Next.js that allows users to plan and manage events. The application should provide a user-friendly interface for users to create, update, and delete events. It should also include features like event registration, user authentication, and event notifications.
@@ -22,7 +22,7 @@ Create a web application using Next.js that allows users to plan and manage even
 - [x] Account deletion (cascade delete dependendent registrations and events)
 ---
 
-- [x] Event Notifications: Implement a notification system to send reminders or updates to registered attendees, such as event date changes or important announcements.
+- [x] Event Notifications: Implement a notification system to send reminders or updates to registered attendees, such as event date changes or event deletion, notifications when other users comment on your event. 
 ---
 
 - [x] Responsive Design: Ensure the application is mobile-friendly and responsive, allowing users to access and interact with it seamlessly on different devices.
@@ -31,17 +31,7 @@ Create a web application using Next.js that allows users to plan and manage even
 - [x] Email verification on signup/ Account activation through email token.
 ---
 
-- [x] SEO Head
-- [x] Handle errors and successes
-- [x] check if passed objects are undefined or null
-- [x] check if trimmed new password is not empty && if oldPass and newPass are not the same
-- [x] make unavailable dates before current date. (from BE and FE)
-- [x] Add tab icon
-- [x] do page generations right! 
-
-
-
-Optional:
+Optional (following steps):
 
 - Social sharing options to allow users to share events on social media platforms.
 ---
