@@ -15,8 +15,10 @@ const EditEventPage = ({ eventDetails }) => {
   const [error, setError] = useState(null);
   const session = useSession();
   const title = useRef();
-  const date = useRef();
-  const time = useRef();
+  const startDate = useRef();
+  const endDate = useRef();
+  const startTime = useRef();
+  const endTime = useRef();
   const location = useRef();
   const description = useRef();
   const { language } = useContext(LanguageContext);
@@ -27,8 +29,10 @@ const EditEventPage = ({ eventDetails }) => {
     
     const newEvent = {
       title: title.current.value,
-      date: date.current.value,
-      time: time.current.value,
+      eventStartDate: startDate.current.value,
+      eventEndDate: endDate.current.value,
+      eventStartTime: startTime.current.value,
+      eventEndTime: endTime.current.value,
       location: location.current.value,
       description: description.current.value,
       authorId: session.data.user.userId,
@@ -46,8 +50,10 @@ const EditEventPage = ({ eventDetails }) => {
 
   useEffect(() => {
     title.current.value = eventDetails.title
-    date.current.value = eventDetails.date
-    time.current.value = eventDetails.time
+    startDate.current.value = eventDetails.startDate
+    endDate.current.value = eventDetails.endDate
+    startTime.current.value = eventDetails.startTime
+    endTime.current.value = eventDetails.endTime
     location.current.value = eventDetails.location
     description.current.value = eventDetails.description
   }, [])
@@ -69,8 +75,10 @@ const EditEventPage = ({ eventDetails }) => {
             L10n={L10n}
             language={language}
             titleRef={title}
-            dateRef={date}
-            timeRef={time}
+            startDateRef={startDate}
+            endDateRef={endDate}
+            startTimeRef={startTime}
+            endTimeRef={endTime}
             locationRef={location}
             descriptionRef={description}
             isAdd={false}
@@ -117,8 +125,10 @@ export async function getServerSideProps(context) {
       eventDetails: {
         id: event._id.toString(),
         title: event.title,
-        date: event.date,
-        time: event.time,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        startTime: event.startTime,
+        endTime: event.endTime,
         location: event.location,
         description: event.description,
         authorName: event.authorName,

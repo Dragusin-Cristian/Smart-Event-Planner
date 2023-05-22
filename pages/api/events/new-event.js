@@ -16,11 +16,13 @@ async function handler(req, res) {
     return;
   }
 
-  const { title, date, time, location, description, authorId, authorName } = req.body;
+  const { title, eventStartDate, eventEndDate, eventStartTime, eventEndTime, location, description, authorId, authorName } = req.body;
 
   if (!title || title.trim().length === 0 ||
-    !date || date.trim().length === 0 ||
-    !time || time.trim().length === 0 ||
+    !eventStartDate || eventStartDate.trim().length === 0 ||
+    !eventEndDate || eventEndDate.trim().length === 0 ||
+    !eventStartTime || eventStartTime.trim().length === 0 ||
+    !eventEndTime || eventEndTime.trim().length === 0 ||
     !location || location.trim().length === 0 ||
     !description || description.trim().length === 0 ||
     !authorId || authorId.trim().length === 0 ||
@@ -30,11 +32,17 @@ async function handler(req, res) {
   }
 
   const currentDate = new Date();
-  const newDate = new Date(date + "T" + time + ":00");
+  const newDateStart = new Date(eventStartDate + "T" + eventStartTime + ":00");
+  const newDateEnd = new Date(eventEndDate + "T" + eventEndTime + ":00");
   currentDate.setDate(currentDate.getDate() + 1)
 
-  if(currentDate > newDate){
-    res.status(403).json({message: "Events must be planned with at least 24 hours before."})
+  if (currentDate > newDateStart) {
+    res.status(403).json({ message: "Events must be planned with at least 24 hours before." })
+    return;
+  }
+
+  if(newDateStart > newDateEnd){
+    res.status(403).json({ message: "The end date must be after the start date." })
     return;
   }
 
@@ -42,7 +50,20 @@ async function handler(req, res) {
   const db = client.db();
 
   const eventsCollection = db.collection("events");
-  const result = await eventsCollection.insertOne({ title, date, time, location, description, authorId, authorName });
+  const result = await eventsCollection.insertOne(
+    {
+      title,
+      startDate: eventStartDate,
+      endDate: eventEndDate,
+      startTime: eventStartTime,
+      endTime: eventEndTime,
+      location,
+      description,
+      authorId,
+      authorName
+    }
+  );
+
   //TODO: handle success and error
   console.log(result);
   client.close();

@@ -4,6 +4,7 @@ import { connectClient } from "../../../utils/MongoDbUtils";
 // import { ics } from "calendar-link";
 import { sendEventSignUpMail } from "../../../utils/mailUtils";
 import dateFormat from "dateformat";
+const ICAL = require('ical.js');
 
 async function handler(req, res) {
   if (req.method !== "POST") {
@@ -16,11 +17,13 @@ async function handler(req, res) {
   const currentUserName = session.user.username;
   const currentUserEmail = session.user.email;
 
-  const { eventId, eventName, date, time, location, description, authorId } = req.body;
+  const { eventId, eventName, eventStartDate, eventEndDate, eventStartTime, eventEndTime, location, description, authorId, } = req.body;
 
   if (!eventId || eventId.trim().length === 0 ||
-    !date || date.trim().length === 0 ||
-    !time || time.trim().length === 0 ||
+    !eventStartDate || eventStartDate.trim().length === 0 ||
+    !eventEndDate || eventEndDate.trim().length === 0 ||
+    !eventStartTime || eventStartTime.trim().length === 0 ||
+    !eventEndTime || eventEndTime.trim().length === 0 ||
     !location || location.trim().length === 0 ||
     !description || description.trim().length === 0 ||
     !authorId || authorId.trim().length === 0) {
@@ -67,20 +70,32 @@ async function handler(req, res) {
 
 
 
-  const icsContent = `BEGIN:VCALENDAR
-  VERSION:2.0
-  PRODID:Event Planner
-  BEGIN:VEVENT
-  DTSTART:${dateFormat(date + " " + time, "isoDateTime")}
-  SUMMARY:${eventName}
-  DESCRIPTION:${description}
-  LOCATION:${location}
-  END:VEVENT
-  END:VCALENDAR`;
-  const icsBase64 = btoa(unescape(encodeURIComponent(icsContent)));
+  // Create a new Calendar object
+  const calendar = new ICAL.Component(['vcalendar', [], []]);
 
-  const dateString = dateFormat(date, "fullDate");
-  sendEventSignUpMail(currentUserEmail, currentUserName, eventName, dateString, time, location, icsBase64);
+  // Create a new Event object
+  const event = new ICAL.Component('vevent');
+
+  // Set event properties
+  event.addPropertyWithValue('uid', '1234567890');
+  event.addPropertyWithValue('summary', eventName);
+  event.addPropertyWithValue('description', description);
+  event.addPropertyWithValue('location', location);
+
+  const startDate = ICAL.Time.fromDateTimeString(eventStartDate + "T" + eventStartTime + ":00Z");
+  event.addPropertyWithValue('dtstart', startDate);
+
+  const endDate = ICAL.Time.fromDateTimeString(eventEndDate + "T" + eventEndTime + ":00Z");
+  event.addPropertyWithValue('dtend', endDate);
+
+  // Add the event to the calendar
+  calendar.addSubcomponent(event);
+
+  // Generate the .ics file content
+  const icsContent = calendar.toString();
+
+  const dateString = dateFormat(eventStartDate, "fullDate");
+  sendEventSignUpMail(currentUserEmail, currentUserName, eventName, dateString, eventStartTime, location, icsContent);
 
 }
 

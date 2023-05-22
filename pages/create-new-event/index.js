@@ -11,8 +11,10 @@ import CreateEventForm from "../../components/create or edit event/CreateEventFo
 const CreateEventPage = () => {
   const session = useSession();
   const title = useRef();
-  const date = useRef();
-  const time = useRef();
+  const startDate = useRef();
+  const endDate = useRef();
+  const startTime = useRef();
+  const endTime = useRef();
   const location = useRef();
   const description = useRef();
   const { language } = useContext(LanguageContext);
@@ -24,8 +26,10 @@ const CreateEventPage = () => {
     setIsLoading(true)
     const newEvent = {
       title: title.current.value,
-      date: date.current.value,
-      time: time.current.value,
+      eventStartDate: startDate.current.value,
+      eventEndDate: endDate.current.value,
+      eventStartTime: startTime.current.value,
+      eventEndTime: endTime.current.value,
       location: location.current.value,
       description: description.current.value,
       authorId: session.data.user.userId,
@@ -60,8 +64,10 @@ const CreateEventPage = () => {
             L10n={L10n}
             language={language}
             titleRef={title}
-            dateRef={date}
-            timeRef={time}
+            startDateRef={startDate}
+            endDateRef={endDate}
+            startTimeRef={startTime}
+            endTimeRef={endTime}
             locationRef={location}
             descriptionRef={description}
             isAdd={true}

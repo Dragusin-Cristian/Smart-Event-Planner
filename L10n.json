@@ -52,7 +52,11 @@
     "your_events": "Your events",
     "loading": "Loading",
     "account_created_text": "Your account was created. Check your email for activation link, THEN, you may log in! (Make sure to also check your spam folder.)",
-    "no_events_profile": "You haven't planned any events."
+    "no_events_profile": "You haven't planned any events.",
+    "start_time": "Start time",
+    "end_time": "End time",
+    "start_date": "Start date",
+    "end_date": "End date"
   },
   "ro": {
     "page_title": "Toate evenimentele",
@@ -107,6 +111,10 @@
     "your_events": "Evenimentele tale",
     "loading": "Incarcare",
     "account_created_text": "Contul tau a fost creat cu succes. Verifica-ti contul de email pentru linkul de activare, APOI, poti sa te loghezi! (Verifica si folderul de spam.)",
-    "no_events_profile": "Nu ai evenimente planificate."
+    "no_events_profile": "Nu ai evenimente planificate.",
+    "start_time": "Ora de inceput",
+    "end_time": "Ora de final",
+    "start_date": "Prima zi",
+    "end_date": "Ultima zi"
   }
 }

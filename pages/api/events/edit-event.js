@@ -15,11 +15,13 @@ async function handler(req, res) {
   const currentUserId = session.user.userId;
 
   const { eventId } = req.query;
-  const { title, date, time, location, description, authorId, authorName } = req.body;
+  const { title, eventStartDate, eventEndDate, eventStartTime, eventEndTime, location, description, authorId, authorName } = req.body;
 
   if (!title || title.trim().length === 0 ||
-    !date || date.trim().length === 0 ||
-    !time || time.trim().length === 0 ||
+    !eventStartDate || eventStartDate.trim().length === 0 ||
+    !eventEndDate || eventEndDate.trim().length === 0 ||
+    !eventStartTime || eventStartTime.trim().length === 0 ||
+    !eventEndTime || eventEndTime.trim().length === 0 ||
     !location || location.trim().length === 0 ||
     !description || description.trim().length === 0 ||
     !authorId || authorId.trim().length === 0 ||
@@ -29,11 +31,17 @@ async function handler(req, res) {
   }
 
   const currentDate = new Date();
-  const newDate = new Date(date + "T" + time + ":00");
+  const newDateStart = new Date(eventStartDate + "T" + eventStartTime + ":00");
+  const newDateEnd = new Date(eventEndDate + "T" + eventEndTime + ":00");
   currentDate.setDate(currentDate.getDate() + 1)
 
-  if(currentDate > newDate){
-    res.status(403).json({message: "Events must be planned with at least 24 hours before."})
+  if (currentDate > newDateStart) {
+    res.status(403).json({ message: "Events must be planned with at least 24 hours before." })
+    return;
+  }
+
+  if(newDateStart > newDateEnd){
+    res.status(403).json({ message: "The end date must be after the start date." })
     return;
   }
 
@@ -59,8 +67,10 @@ async function handler(req, res) {
       {
         $set: {
           title: title,
-          date: date,
-          time: time,
+          startDate: eventStartDate,
+          endDate: eventEndDate,
+          startTime: eventStartTime,
+          endTime: eventEndTime,
           location: location,
           description: description,
           authorId: authorId,
@@ -71,8 +81,9 @@ async function handler(req, res) {
 
     console.log("resultDeleteEvent", result);
 
-    res.status(200).json({ message: "You've successfully deleted this event!" });
+    res.status(200).json({ message: "You've successfully edited this event!" });
 
+    // send notification mail to all registered users:
     const registrations = await registrationsCollection.find({ eventId: eventId }).toArray();
     console.log(registrations);
 
@@ -85,7 +96,7 @@ async function handler(req, res) {
 
     const dateString = dateFormat(existingEvent.date, "fullDate");
     for (const user of users) {
-      sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, dateString, time, location, description);
+      sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, dateString, eventStartTime, location, description);
     }
 
   }

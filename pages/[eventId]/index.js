@@ -21,7 +21,7 @@ const EventDetailsPage = ({ eventDetails }) => {
   const [isLoadingComment, setIsLoadingComment] = useState(false);
   const [errorEventRegistration, setErrorEventRegistration] = useState(null);
   const [errorComment, setErrorComment] = useState(null);
-  const { id: eventId, title, date, description, location, time, authorName, authorId } = eventDetails;
+  const { id: eventId, title, startDate, endDate, description, location, startTime, endTime, authorName, authorId } = eventDetails;
   const [registrations, setRegistrations] = useState([])
   const [comments, setComments] = useState([]);
   const isAuthor = session.data?.user.userId === authorId;
@@ -32,8 +32,10 @@ const EventDetailsPage = ({ eventDetails }) => {
       const response = await axios.post("/api/events/signup-for-event", {
         eventId: eventId,
         eventName: title,
-        date: date,
-        time: time,
+        eventStartDate: startDate,
+        eventEndDate: endDate,
+        eventStartTime: startTime,
+        eventEndTime: endTime,
         location: location,
         description: description,
         authorId: authorId
@@ -149,8 +151,10 @@ const EventDetailsPage = ({ eventDetails }) => {
               <ul>
                 <li>{L10n[language].title_word}: {eventDetails.title}</li>
                 <li>{L10n[language].author}: {isAuthor ? L10n[language].you_word : authorName}</li>
-                <li>{L10n[language].date_word}: {date}</li>
-                <li>{L10n[language].time_word}: {time}</li>
+                <li>{L10n[language].start_date}: {startDate}</li>
+                <li>{L10n[language].start_time}: {startTime}</li>
+                <li>{L10n[language].end_date}: {endDate}</li>
+                <li>{L10n[language].end_time}: {endTime}</li>
                 <li>{L10n[language].location_word}: {location}</li>
                 <li>{registeredUsersString}.</li>
                 <li>{L10n[language].description_word}:</li>
@@ -227,8 +231,10 @@ export async function getStaticProps(context) {
       eventDetails: {
         id: event._id.toString(),
         title: event.title,
-        date: event.date,
-        time: event.time,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        startTime: event.startTime,
+        endTime: event.endTime,
         location: event.location,
         description: event.description,
         authorName: event.authorName,

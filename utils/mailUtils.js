@@ -91,7 +91,14 @@ export const sendEventSignUpMail = (userEmail, userName, eventName, date, time, 
     from: EMAIL_FROM,
     to: userEmail,
     subject: EMAIL_SUBJECT_ADD_TO_CALENDAR,
-    html: generateEventSignUpEmailTemplate(userName, eventName, date, time, location, ics)
+    html: generateEventSignUpEmailTemplate(userName, eventName, date, time, location, ics),
+    attachments: [
+      {
+        filename: `test.ics`,
+        content: ics,
+        contentType: 'text/calendar',
+      },
+    ],
   };
 
   // Send the email to registered users
@@ -162,7 +169,7 @@ const generateEventSignUpEmailTemplate = (userName, eventName, date, time, locat
       <h1>Event Updated</h1>\
       <p>Dear ' + userName + ',</p>\
       <p>You are now signed up for the ' + eventName + ' on ' + date + ' ' + time + ' at ' + location + '.' + '</p>\
-      <p>Add the event to your calendar by clicking here: <h3><a href="data:text/calendar;base64,' + ics + '" download="event.ics">HERE</a></h3></p>\
+      <p>Add the event to your calendar by downloading the attached .ics file.</p>\
       <p>If you have any questions or need further assistance, please don\'t hesitate to contact us.</p>\
       <p>Thank you for using our platform.</p>\
       <p>Best regards,</p>\

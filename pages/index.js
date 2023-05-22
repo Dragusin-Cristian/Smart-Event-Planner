@@ -72,21 +72,19 @@ export async function getStaticProps() {
     const db = client.db();
 
     const eventsCollection = db.collection("events");
-    const events = await eventsCollection.find().toArray();
+    const events = await eventsCollection.find().project({endTime: 0, endDate: 0, authorId: 0, authorName: 0}).toArray();
 
     client.close();
     return {
-      revalidate: 3000, // every 5 minutes
+      revalidate: 300, // every 5 minutes should be fine
       props: {
         allEvents: events.length ? events.map(e => ({
           id: e._id.toString(),
           title: e.title,
-          date: e.date,
-          time: e.time,
+          startDate: e.startDate,
+          startTime: e.startTime,
           location: e.location,
           description: e.description,
-          authorId: e.authorId,
-          authorName: e.authorName
         })) : []
       }
     }
