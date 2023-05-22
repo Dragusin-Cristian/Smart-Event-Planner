@@ -17,9 +17,9 @@ async function handler(req, res) {
   const client = await connectClient();
   const db = client.db();
   const registrationsCollection = db.collection("registrations");
-
   const registrations = await registrationsCollection.find({ eventId: eventId }).project({ eventId: 0 }).toArray();
 
+  client.close();
   res.status(200).json({
     registrations: registrations ? registrations.map(reg => ({
       signedUserName: reg.signedUserName,
@@ -28,9 +28,6 @@ async function handler(req, res) {
       _id: reg._id.toString()
     })) : []
   })
-
-  client.close();
-
 }
 
 export default handler;

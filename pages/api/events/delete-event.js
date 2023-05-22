@@ -27,12 +27,13 @@ async function handler(req, res) {
   const existingEvent = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
 
   if (!existingEvent) {
-    res.status(404).json({ message: "The event you are trying to delete doesn't appear to exist." });
     client.close();
+    res.status(404).json({ message: "The event you are trying to delete doesn't appear to exist." });
     return;
   }
 
   if (existingEvent.authorId !== currentUserId) {
+    client.close();
     res.status(401).json({ message: "You can only delete your own events!" });
   } else {
     // get the event's registrations so we can notify the registered users about the deletion:
@@ -46,8 +47,7 @@ async function handler(req, res) {
         commentsCollection.deleteMany({ eventId: eventId })
       ])
 
-    res.status(200).json({ message: "You've successfully deleted this event!" });
-
+    // Send notification to all registered users:
     // handle all requests in parallel:
     const usersP = [];
     for (const reg of registrations) {
@@ -60,10 +60,10 @@ async function handler(req, res) {
     for (const user of users) {
       sendEventDeletedMail(user.username, user.email, existingEvent.title, dateString, existingEvent.time, existingEvent.location);
     }
+
+    client.close();
+    res.status(200).json({ message: "You've successfully deleted this event!" });
   }
-
-  client.close();
-
 }
 
 export default handler;

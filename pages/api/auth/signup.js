@@ -18,14 +18,12 @@ async function handler(req, res) {
   }
 
   const client = await connectClient();
-
   const db = client.db();
-
   const existingUser = await db.collection("users").findOne({ email: email });
 
   if (existingUser) {
-    res.status(422).json({ message: "User already exists!" });
     client.close();
+    res.status(422).json({ message: "User already exists!" });
     return;
   }
 
@@ -43,9 +41,9 @@ async function handler(req, res) {
 
   client.close();
 
+  sendActivateAccountMail(email, username, uuid);
   res.status(201).json({ message: "Created user!" });
 
-  sendActivateAccountMail(email, username, uuid);
 }
 
 export default handler;

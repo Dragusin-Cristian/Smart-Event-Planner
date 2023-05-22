@@ -20,9 +20,9 @@ async function handler(req, res) {
   const client = await connectClient();
   const db = client.db();
   const eventsCollection = db.collection("events");
-
   const events = await eventsCollection.find({ authorId: session.user?.userId }).toArray();
 
+  client.close();
   res.status(200).json({
     profileEvents: events.length ? events.map(e => ({
       id: e._id.toString(),
@@ -35,9 +35,6 @@ async function handler(req, res) {
       authorName: e.authorName
     })) : []
   })
-
-  client.close();
-
 }
 
 export default handler;

@@ -26,8 +26,8 @@ async function handler(req, res) {
     !description || description.trim().length === 0 ||
     !authorId || authorId.trim().length === 0 ||
     !authorName || authorName.trim().length === 0) {
-      res.status(403).json({message: "Cannot upload empty data."})
-      return;
+    res.status(403).json({ message: "Cannot upload empty data." })
+    return;
   }
 
   const currentDate = new Date();
@@ -40,7 +40,7 @@ async function handler(req, res) {
     return;
   }
 
-  if(newDateStart > newDateEnd){
+  if (newDateStart > newDateEnd) {
     res.status(403).json({ message: "The end date must be after the start date." })
     return;
   }
@@ -54,13 +54,14 @@ async function handler(req, res) {
   const existingEvent = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
 
   if (!existingEvent) {
-    res.status(404).json({ message: "The event you are trying to edit doesn't appear to exist." });
     client.close();
+    res.status(404).json({ message: "The event you are trying to edit doesn't appear to exist." });
     return;
   }
 
   // check if the user is authorized to delete this event (must it's own):
   if (existingEvent.authorId !== currentUserId) {
+    client.close();
     res.status(401).json({ message: "You can only edit your own events!" });
   } else {
     await eventsCollection.updateOne({ _id: new ObjectId(eventId) },
@@ -78,7 +79,6 @@ async function handler(req, res) {
         }
       });
 
-    res.status(200).json({ message: "You've successfully edited this event!" });
 
     // send notification mail to all registered users:
     const registrations = await registrationsCollection.find({ eventId: eventId }).toArray();
@@ -90,14 +90,15 @@ async function handler(req, res) {
     }
     const users = await Promise.all(usersP);
 
+    client.close();
+
     const dateString = dateFormat(existingEvent.date, "fullDate");
     for (const user of users) {
       sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, dateString, eventStartTime, location, description);
     }
+
+    res.status(200).json({ message: "You've successfully edited this event!" });
   }
-
-  client.close();
-
 }
 
 export default handler;

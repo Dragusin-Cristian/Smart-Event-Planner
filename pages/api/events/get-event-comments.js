@@ -16,9 +16,9 @@ async function handler(req, res) {
   const client = await connectClient();
   const db = client.db();
   const commentsCollection = db.collection("comments");
-
   const comments = await commentsCollection.find({ eventId: eventId }).project({ usersString: 0, eventId: 0 }).toArray();
 
+  client.close();
   res.status(200).json({
     comments: comments ? comments.map(comm => ({
       id: comm._id.toString(),
@@ -27,9 +27,6 @@ async function handler(req, res) {
       userId: comm.userId
     })) : []
   })
-
-  client.close();
-
 }
 
 export default handler;

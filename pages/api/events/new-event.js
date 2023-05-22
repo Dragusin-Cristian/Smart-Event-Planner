@@ -41,15 +41,15 @@ async function handler(req, res) {
     return;
   }
 
-  if(newDateStart > newDateEnd){
+  if (newDateStart > newDateEnd) {
     res.status(403).json({ message: "The end date must be after the start date." })
     return;
   }
 
   const client = await connectClient();
   const db = client.db();
-
   const eventsCollection = db.collection("events");
+
   await eventsCollection.insertOne(
     {
       title,
@@ -65,9 +65,7 @@ async function handler(req, res) {
   );
 
   client.close();
-
   res.status(201).json({ message: "Event added!" });
-
 }
 
 export default handler;

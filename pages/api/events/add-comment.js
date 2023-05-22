@@ -41,6 +41,15 @@ async function handler(req, res) {
     userName: userName
   });
 
+
+  // Send notification to the author:
+  const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
+  const author = await usersCollection.findOne({ _id: new ObjectId(event.authorId) });
+
+  client.close();
+
+  sendEventCommentedMail(author.email, event.authorName, userName, event.title, eventId);
+
   res.status(201).json({
     message: "Comment added!",
     addedComment: {
@@ -50,13 +59,6 @@ async function handler(req, res) {
       userId: userId
     }
   });
-
-  const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) });
-  const author = await usersCollection.findOne({ _id: new ObjectId(event.authorId) });
-
-  client.close();
-
-  sendEventCommentedMail(author.email, event.authorName, userName, event.title, eventId);
 }
 
 export default handler;

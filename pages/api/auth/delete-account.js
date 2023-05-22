@@ -30,13 +30,14 @@ async function handler(req, res) {
 
   // check if the account exists:
   if (!existingAccount) {
-    res.status(404).json({ message: "The user you are trying to delete doesn't appear to exist." });
     client.close();
+    res.status(404).json({ message: "The user you are trying to delete doesn't appear to exist." });
     return;
   }
 
   // check if the user is authorized to delete this account (must it's own):
   if (existingAccount._id.toString() !== currentUserId) {
+    client.close();
     res.status(401).json({ message: "You can only delete your own account!" });
   } else {
     // delete the user's events, comments and registrations:
@@ -49,12 +50,10 @@ async function handler(req, res) {
 
     // delete the user:
     await usersCollection.deleteOne({ _id: new ObjectId(currentUserId) });
-
+    
+    client.close();
     res.status(200).json({ message: "You've successfully deleted your account!" });
   }
-
-  client.close();
-
 }
 
 export default handler;

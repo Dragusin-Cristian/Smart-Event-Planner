@@ -26,8 +26,8 @@ async function handler(req, res) {
   const user = await usersCollection.findOne({ email: userEmail });
 
   if (!user) {
-    res.status(404).json({ message: "User not found" });
     client.close();
+    res.status(404).json({ message: "User not found" });
     return;
   }
 
@@ -36,20 +36,20 @@ async function handler(req, res) {
   const passwordsAreEqual = await verifyPassword(oldPassword, currentPassword);
 
   if (!passwordsAreEqual) {
-    res.status(403).json({ message: "The password you entered is wrong, cannot authorize using this password." });
     client.close();
+    res.status(403).json({ message: "The password you entered is wrong, cannot authorize using this password." });
     return;
   }
 
   if(!oldPassword || oldPassword.trim().length === 0 || !newPassword || newPassword.trim().length === 0){
-    res.status(403).json({message: "Entered password is not valid."});
     client.close()
+    res.status(403).json({message: "Entered password is not valid."});
     return;
   }
 
   if(oldPassword === newPassword){
-    res.status(403).json({message: "The new password is the same as the old one."});
     client.close()
+    res.status(403).json({message: "The new password is the same as the old one."});
     return;
   }
 
