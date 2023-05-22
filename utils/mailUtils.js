@@ -22,7 +22,9 @@ export const sendEventDeletedMail = (userName, userEmail, eventName, dateString,
   // Send the email to registered users
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
+    }else{
+      console.log('Email sent successfully:', info);
     }
   });
 }
@@ -39,7 +41,9 @@ export const sendEventCommentedMail = (authorEmail, authorName, userName, eventN
   // Send the email to registered users
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
+    }else{
+      console.log('Email sent successfully:', info);
     }
   });
 }
@@ -55,7 +59,9 @@ export const sendEventUpdatedMail = (userEmail, userName, eventName, eventId, ne
   // Send the email to registered users
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
+    }else{
+      console.log('Email sent successfully:', info);
     }
   });
 }
@@ -72,7 +78,9 @@ export const sendActivateAccountMail = (userEmail, userName, uuid) => {
   // Send the email to registered users
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
+    }else{
+      console.log('Email sent successfully:', info);
     }
   });
 }
@@ -96,7 +104,9 @@ export const sendEventSignUpMail = (userEmail, userName, eventName, date, time, 
   // Send the email to registered users
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
+    }else{
+      console.log('Email sent successfully:', info);
     }
   });
 }
