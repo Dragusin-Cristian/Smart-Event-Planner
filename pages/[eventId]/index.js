@@ -209,7 +209,7 @@ export async function getStaticPaths() {
   client.close();
 
   return {
-    fallback: false,
+    fallback: "blocking", // in this case is better then true (or false), because it waits until the page is fully returned (SEO & UX purposes)
     paths: events.map(event => ({ params: { eventId: event._id.toString() } }))
   }
 }

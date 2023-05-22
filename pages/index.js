@@ -64,9 +64,8 @@ export default function Home({ allEvents, dbError }) {
   )
 }
 
-// Let's imagine we have A LOT of requests, HUGE TRAFFIC.
-// For this, our server has to be protected from overgenerating the same page more then what is needed.
-export async function getStaticProps() {
+// For simplicity, I'll keep the getServerSideProps for now:
+export async function getServerSideProps() {
   try {
     const client = await connectClient();
     const db = client.db();
@@ -76,7 +75,6 @@ export async function getStaticProps() {
 
     client.close();
     return {
-      revalidate: 300, // every 5 minutes should be fine
       props: {
         allEvents: events.length ? events.map(e => ({
           id: e._id.toString(),
@@ -97,3 +95,39 @@ export async function getStaticProps() {
   }
 
 }
+
+// Let's imagine we have A LOT of requests, HUGE TRAFFIC.
+// For this, our server has to be protected from overgenerating the same page more then what is needed.
+// And in the client we can hidrate the page with the newest (not rendered by the server) events (obviously, we have to make also make another api route for that).
+
+// export async function getStaticProps() {
+//   try {
+//     const client = await connectClient();
+//     const db = client.db();
+
+//     const eventsCollection = db.collection("events");
+//     const events = await eventsCollection.find().project({endTime: 0, endDate: 0, authorId: 0, authorName: 0}).toArray();
+
+//     client.close();
+//     return {
+//       revalidate: 3600, // every 1 hour should be fine
+//       props: {
+//         allEvents: events.length ? events.map(e => ({
+//           id: e._id.toString(),
+//           title: e.title,
+//           startDate: e.startDate,
+//           startTime: e.startTime,
+//           location: e.location,
+//           description: e.description,
+//         })) : []
+//       }
+//     }
+//   } catch (e) {
+//     return {
+//       props: {
+//         dbError: true
+//       }
+//     }
+//   }
+
+// }
