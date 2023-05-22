@@ -39,7 +39,6 @@ export async function getServerSideProps(context) {
         activationCode: ""
       }
     })
-    console.log(response);
 
     client.close();
 
@@ -56,8 +55,6 @@ export async function getServerSideProps(context) {
     }
   } catch (error) {
     client.close();
-
-    console.log(error);
     return {
       props: {
         message: L10n[language].error

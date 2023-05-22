@@ -63,7 +63,7 @@ async function handler(req, res) {
   if (existingEvent.authorId !== currentUserId) {
     res.status(401).json({ message: "You can only edit your own events!" });
   } else {
-    const result = await eventsCollection.updateOne({ _id: new ObjectId(eventId) },
+    await eventsCollection.updateOne({ _id: new ObjectId(eventId) },
       {
         $set: {
           title: title,
@@ -77,15 +77,11 @@ async function handler(req, res) {
           authorName: authorName
         }
       });
-    //TODO: handle success and error
-
-    console.log("resultDeleteEvent", result);
 
     res.status(200).json({ message: "You've successfully edited this event!" });
 
     // send notification mail to all registered users:
     const registrations = await registrationsCollection.find({ eventId: eventId }).toArray();
-    console.log(registrations);
 
     // handle all requests in parallel:
     const usersP = [];
@@ -98,7 +94,6 @@ async function handler(req, res) {
     for (const user of users) {
       sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, dateString, eventStartTime, location, description);
     }
-
   }
 
   client.close();

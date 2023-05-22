@@ -62,12 +62,9 @@ async function handler(req, res) {
   const result = await registrationsCollection.insertOne(newRegistration);
   newRegistration._id = result.insertedId.toString();
 
-  //TODO: handle success and error
-  console.log(result);
   client.close();
 
   res.status(201).json({ message: "Event signup succeeded!", newRegistration: newRegistration });
-
 
 
   // Create a new Calendar object

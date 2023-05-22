@@ -12,8 +12,6 @@ async function handler(req, res) {
 
   const session = await getServerSession(req, res, authOptions);
 
-  // Protects the API route from unauthenticated users:
-  // GREAT FOR CHECKING RIGHTS
   if (!session) {
     res.status(401).json({ message: "Not authenticated" });
     return;
@@ -23,7 +21,6 @@ async function handler(req, res) {
 
   const client = await connectClient();
   const db = client.db();
-
   const usersCollection = db.collection("users");
 
   const user = await usersCollection.findOne({ email: userEmail });
@@ -57,9 +54,7 @@ async function handler(req, res) {
   }
 
   const hashedPassword = await hashPassword(newPassword);
-  const result = await usersCollection.updateOne({ email: userEmail }, { $set: { password: hashedPassword } });
-
-  //TODO more error handling ...
+  await usersCollection.updateOne({ email: userEmail }, { $set: { password: hashedPassword } });
 
   client.close();
   res.status(200).json({ message: "Password updated" });

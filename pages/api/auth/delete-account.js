@@ -48,12 +48,7 @@ async function handler(req, res) {
       ]);
 
     // delete the user:
-    //TODO: handle success and error
-    const resultDeleteUser = await usersCollection.deleteOne({ _id: new ObjectId(currentUserId) });
-    console.log("resultDeleteUser", resultDeleteUser);
-    console.log("resultDeleteEvents", resultDeleteEvents);
-    console.log("resultDeleteComments", resultDeleteComments);
-    console.log("resultDeleteRegistrations", resultDeleteRegistrations);
+    await usersCollection.deleteOne({ _id: new ObjectId(currentUserId) });
 
     res.status(200).json({ message: "You've successfully deleted your account!" });
   }

@@ -33,7 +33,7 @@ async function handler(req, res) {
 
   const uuid = uuidv4();
 
-  const result = await db.collection("users").insertOne({
+  await db.collection("users").insertOne({
     email: email,
     password: hashedPassword,
     username: username,

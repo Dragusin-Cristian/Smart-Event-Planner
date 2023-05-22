@@ -30,9 +30,7 @@ async function handler(req, res) {
   if (existingSignup.signedUserId !== currentUserId) {
     res.status(401).json({ message: "You can only delete your signups for events!" });
   } else {
-    const result = await registrationsCollection.deleteOne({ _id: new ObjectId(registrationId) });
-    //TODO: handle success and error
-
+    await registrationsCollection.deleteOne({ _id: new ObjectId(registrationId) });
     res.status(200).json({ message: "You've been successfully resigned from this event!" });
   }
 

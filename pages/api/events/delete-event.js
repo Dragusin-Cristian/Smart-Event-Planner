@@ -46,11 +46,6 @@ async function handler(req, res) {
         commentsCollection.deleteMany({ eventId: eventId })
       ])
 
-    //TODO: handle errors
-    console.log("resultDeleteEvent", resultDeleteEvent);
-    console.log("resultDeleteReg", resultDeleteReg);
-    console.log("resultDeleteComm", resultDeleteComm);
-
     res.status(200).json({ message: "You've successfully deleted this event!" });
 
     // handle all requests in parallel:

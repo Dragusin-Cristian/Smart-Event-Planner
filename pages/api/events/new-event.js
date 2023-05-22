@@ -50,7 +50,7 @@ async function handler(req, res) {
   const db = client.db();
 
   const eventsCollection = db.collection("events");
-  const result = await eventsCollection.insertOne(
+  await eventsCollection.insertOne(
     {
       title,
       startDate: eventStartDate,
@@ -64,8 +64,6 @@ async function handler(req, res) {
     }
   );
 
-  //TODO: handle success and error
-  console.log(result);
   client.close();
 
   res.status(201).json({ message: "Event added!" });

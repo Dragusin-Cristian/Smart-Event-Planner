@@ -40,8 +40,6 @@ async function handler(req, res) {
     userId: userId,
     userName: userName
   });
-  //TODO: handle success and error
-  console.log(result);
 
   res.status(201).json({
     message: "Comment added!",

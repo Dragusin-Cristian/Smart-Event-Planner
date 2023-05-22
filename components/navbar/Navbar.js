@@ -13,7 +13,7 @@ const Navbar = ({ navBarActive, setNavBarActive, selectHandler, language }) => {
 
   const logoutHandler = () => {
     deAtivateNavBar();
-    signOut(); //TODO handle the result here
+    signOut();
   }
 
   const handleNavBarActive = () => {

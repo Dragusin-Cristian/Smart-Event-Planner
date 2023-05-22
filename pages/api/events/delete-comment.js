@@ -30,11 +30,7 @@ async function handler(req, res) {
   if (existingComment.userId !== currentUserId) {
     res.status(401).json({ message: "You can only delete your own comments!" });
   } else {
-    const resultDeleteComment = await commentsCollection.deleteOne({ _id: new ObjectId(commentId) });
-    //TODO: handle success and error
-
-    console.log("resultDeleteComment", resultDeleteComment);
-
+    await commentsCollection.deleteOne({ _id: new ObjectId(commentId) });
     res.status(200).json({ message: "You've successfully deleted this comment!" });
   }
 

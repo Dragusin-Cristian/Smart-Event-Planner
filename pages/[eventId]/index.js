@@ -99,8 +99,6 @@ const EventDetailsPage = ({ eventDetails }) => {
         axios.get(`/api/events/get-event-registrations?eventId=${eventId}`),
       ]);
 
-      console.log(commentsP, registrationsP);
-
       setRegistrations(registrationsP.data.registrations);
       setComments(commentsP.data.comments);
     }

@@ -10,8 +10,6 @@ async function handler(req, res) {
 
   const session = await getServerSession(req, res, authOptions);
 
-  console.log(session);
-
   // Protects the API route against unauthenticated users:
   if (!session) {
     res.status(401).json({ message: "Not authenticated" });

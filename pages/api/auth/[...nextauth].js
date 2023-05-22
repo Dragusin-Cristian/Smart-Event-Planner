@@ -38,15 +38,11 @@ export const authOptions = {
     })
   ],
   callbacks: {
-    // async jwt({ token, user }) {
-    //   return { ...token, ...user }
-    // },
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token and user id from a provider.
       session.accessToken = token.accessToken
       session.user.id = token.id
 
-      //TODO: Use database sessions, instead of JWT!
       const client = await connectClient();
       const usersCollection = client.db().collection("users");
       const u = await usersCollection.findOne({ email: session.user.email });
