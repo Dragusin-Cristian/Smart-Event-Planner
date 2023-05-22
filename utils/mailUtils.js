@@ -235,7 +235,7 @@ const generateActivateAccountEmailTemplate = (userName, uuid) => {
     <div class="container">\
       <h1>Event Updated</h1>\
       <p>Dear ' + userName + ',</p>\
-      <p>Click <h2><a href="' + process.env.HOST + '/activate-account/' + uuid + '">HERE</a></h2> to activate your account.</p>\
+      <p>Click <h2><a href="' + process.env.HOST_URL + '/activate-account/' + uuid + '">HERE</a></h2> to activate your account.</p>\
       <p>If you have any questions or need further assistance, please don\'t hesitate to contact us.</p>\
       <p>Thank you for using our platform.</p>\
       <p>Best regards,</p>\
@@ -301,7 +301,7 @@ const generateUpdateEventEmailTemplate = (userName, eventName, eventId, newTitle
     <div class="container">\
       <h1>Event Updated</h1>\
       <p>Dear ' + userName + ',</p>\
-      <p><a href="' + process.env.HOST + '/' + eventId + '">' + eventName + '</a>\'s details just got updated. Check it out!</p>\
+      <p><a href="' + process.env.HOST_URL + '/' + eventId + '">' + eventName + '</a>\'s details just got updated. Check it out!</p>\
       <h3>The updated details are:</h3>\
       <p>Title: ' + newTitle + '</p>\
       <p>Date: ' + date + '</p>\
@@ -373,7 +373,7 @@ const generateCommentEventEmailTemplate = (authorName, userName, eventName, even
     <div class="container">\
       <h1>Event Comment</h1>\
       <p>Dear ' + authorName + ',</p>\
-      <p>' + userName + ' just commented on your event <a href="' + process.env.HOST + '/' + eventId + '">' + eventName + '</a>. Check it out!</p>\
+      <p>' + userName + ' just commented on your event <a href="' + process.env.HOST_URL + '/' + eventId + '">' + eventName + '</a>. Check it out!</p>\
       <p>If you have any questions or need further assistance, please don\'t hesitate to contact us.</p>\
       <p>Thank you for using our platform.</p>\
       <p>Best regards,</p>\
