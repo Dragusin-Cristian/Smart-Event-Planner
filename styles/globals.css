@@ -15,7 +15,7 @@ body {
   color: white;
 }
 
-select {
+select, option {
   color: black;
 }
 
@@ -33,7 +33,7 @@ select {
     background: black;
   }
 
-  select {
+  select, option {
     color: white;
   }
 }
