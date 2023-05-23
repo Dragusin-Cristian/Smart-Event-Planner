@@ -154,6 +154,9 @@ li:not(:first-child) {
   margin-bottom: 10px;
   font-size: 2em;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .CardEvent{
