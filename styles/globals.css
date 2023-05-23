@@ -15,6 +15,10 @@ body {
   color: white;
 }
 
+select {
+  color: black;
+}
+
 *::selection{
   background-color: rgb(255, 0, 0);
   color: black;
