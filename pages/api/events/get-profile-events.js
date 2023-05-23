@@ -27,8 +27,10 @@ async function handler(req, res) {
     profileEvents: events.length ? events.map(e => ({
       id: e._id.toString(),
       title: e.title,
-      date: e.date,
-      time: e.time,
+      startDate: e.startDate,
+      endDate: e.endDate,
+      startTime: e.startTime,
+      endTime: e.endTime,
       location: e.location,
       description: e.description,
       authorId: e.authorId,

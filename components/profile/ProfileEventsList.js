@@ -9,8 +9,10 @@ const ProfileEventsList = ({ events, handleDelete, L10n, language }) => {
           <ProfileEvent
             key={i}
             title={e.title}
-            date={e.date}
-            time={e.time}
+            startDate={e.startDate}
+            endDate={e.endDate}
+            startTime={e.startTime}
+            endTime={e.endTime}
             id={e.id}
             handleDelete={handleDelete}
             L10n={L10n}
