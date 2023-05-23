@@ -32,6 +32,10 @@ select {
     color: white;
     background: black;
   }
+
+  select {
+    color: white;
+  }
 }
 
 .pageContent{
