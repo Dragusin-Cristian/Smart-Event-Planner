@@ -17,9 +17,9 @@ export default function Home({ allEvents, dbError }) {
     setEvents(() => {
       const newState = allEvents.filter(event =>
         event.title.toLowerCase().indexOf(value.toLowerCase()) != -1 ||
-        event.date.toLowerCase().indexOf(value.toLowerCase()) != -1 ||
+        event.startDate.toLowerCase().indexOf(value.toLowerCase()) != -1 ||
         event.location.toLowerCase().indexOf(value.toLowerCase()) != -1 ||
-        event.time.toLowerCase().indexOf(value.toLowerCase()) != -1);
+        event.startTime.toLowerCase().indexOf(value.toLowerCase()) != -1);
       return newState;
     });
   }
