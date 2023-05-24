@@ -40,7 +40,7 @@ async function handler(req, res) {
     return;
   }
 
-  if (newDateStart > newDateEnd) {
+  if (newDateStart >= newDateEnd) {
     res.status(403).json({ message: "The end date must be after the start date." })
     return;
   }
