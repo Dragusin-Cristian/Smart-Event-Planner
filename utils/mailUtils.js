@@ -66,7 +66,7 @@ export const sendEventUpdatedMail = (userEmail, userName, eventName, eventId, ne
   });
 }
 
-export const sendActivateAccountMail = (userEmail, userName, uuid) => {
+export const sendActivateAccountMail = async (userEmail, userName, uuid) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -76,13 +76,17 @@ export const sendActivateAccountMail = (userEmail, userName, uuid) => {
   };
 
   // Send the email to registered users
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    }else{
-      console.log('Email sent successfully:', info);
-    }
-  });
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+        reject(error);
+      }else{
+        console.log('Email sent successfully:', info);
+        resolve(info)
+      }
+    });
+  })
 }
 
 export const sendEventSignUpMail = (userEmail, userName, eventName, date, time, location, ics) => {

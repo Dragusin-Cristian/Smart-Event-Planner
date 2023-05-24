@@ -41,7 +41,7 @@ async function handler(req, res) {
 
   client.close();
 
-  sendActivateAccountMail(email, username, uuid);
+  await sendActivateAccountMail(email, username, uuid);
   res.status(201).json({ message: "Created user!" });
 
 }
