@@ -55,13 +55,13 @@ export const sendEventCommentedMail = async (authorEmail, authorName, userName, 
     });
   })
 }
-export const sendEventUpdatedMail = async (userEmail, userName, eventName, eventId, newTitle, date, time, location, description) => {
+export const sendEventUpdatedMail = async (userEmail, userName, eventName, eventId, newTitle, startDate, startTime, endDate, endTime, location, description) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
     to: userEmail,
     subject: EMAIL_SUBJECT_UPDATE,
-    html: generateUpdateEventEmailTemplate(userName, eventName, eventId, newTitle, date, time, location, description)
+    html: generateUpdateEventEmailTemplate(userName, eventName, eventId, newTitle, startDate, startTime, endDate, endTime, location, description)
   };
 
   // Send the email to registered users
@@ -110,7 +110,7 @@ export const sendEventSignUpMail = async (userEmail, userName, eventName, date, 
     html: generateEventSignUpEmailTemplate(userName, eventName, date, time, location, ics),
     attachments: [
       {
-        filename: `test.ics`,
+        filename: `${eventName}.ics`,
         content: ics,
         contentType: 'text/calendar',
       },
@@ -264,7 +264,7 @@ const generateActivateAccountEmailTemplate = (userName, uuid) => {
   </body>\
   </html>';
 }
-const generateUpdateEventEmailTemplate = (userName, eventName, eventId, newTitle, date, time, location, description) => {
+const generateUpdateEventEmailTemplate = (userName, eventName, eventId, newTitle, startDate, startTime, endDate, endTime, location, description) => {
   return '\
   <!DOCTYPE html>\
   <html>\
@@ -324,8 +324,8 @@ const generateUpdateEventEmailTemplate = (userName, eventName, eventId, newTitle
       <p><a href="' + process.env.HOST_URL + '/' + eventId + '">' + eventName + '</a>\'s details just got updated. Check it out!</p>\
       <h3>The updated details are:</h3>\
       <p>Title: ' + newTitle + '</p>\
-      <p>Date: ' + date + '</p>\
-      <p>Time: ' + time + '</p>\
+      <p>Starts on: ' + startDate + ' at ' + startTime + '.</p>\
+      <p>Ends on: ' + endDate + ' at ' + endTime + '.</p>\
       <p>Location: ' + location + '</p>\
       <p>Description: ' + description + '</p>\
       <p>If you have any questions or need further assistance, please don\'t hesitate to contact us.</p>\

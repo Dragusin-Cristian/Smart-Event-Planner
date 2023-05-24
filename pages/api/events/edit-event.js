@@ -92,11 +92,12 @@ async function handler(req, res) {
 
     client.close();
 
-    const dateString = dateFormat(existingEvent.date, "fullDate");
+    const startDateString = dateFormat(eventStartDate, "fullDate");
+    const endDateString = dateFormat(eventEndDate, "fullDate");
     // send all mails in parallel:
     const mailPromises = [];
     for (const user of users) {
-      mailPromises.push(sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, dateString, eventStartTime, location, description));
+      mailPromises.push(sendEventUpdatedMail(user.email, user.username, existingEvent.title, eventId, title, startDateString, eventStartTime, endDateString, eventEndTime, location, description));
     }
     await Promise.all(mailPromises)
 
