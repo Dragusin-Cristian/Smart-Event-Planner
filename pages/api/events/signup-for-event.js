@@ -84,7 +84,7 @@ async function handler(req, res) {
   const icsContent = calendar.toString();
 
   const dateString = dateFormat(eventStartDate, "fullDate");
-  sendEventSignUpMail(currentUserEmail, currentUserName, eventName, dateString, eventStartTime, location, icsContent);
+  await sendEventSignUpMail(currentUserEmail, currentUserName, eventName, dateString, eventStartTime, location, icsContent);
 
   res.status(201).json({ message: "Event signup succeeded!", newRegistration: newRegistration });
 }

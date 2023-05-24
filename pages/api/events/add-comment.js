@@ -48,7 +48,7 @@ async function handler(req, res) {
 
   client.close();
 
-  sendEventCommentedMail(author.email, event.authorName, userName, event.title, eventId);
+  await sendEventCommentedMail(author.email, event.authorName, userName, event.title, eventId);
 
   res.status(201).json({
     message: "Comment added!",

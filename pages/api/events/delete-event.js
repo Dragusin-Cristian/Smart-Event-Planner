@@ -57,9 +57,11 @@ async function handler(req, res) {
     const dateString = dateFormat(existingEvent.date, "fullDate");
 
     // send all the users an email:
+    const emailPromises = []
     for (const user of users) {
-      sendEventDeletedMail(user.username, user.email, existingEvent.title, dateString, existingEvent.time, existingEvent.location);
+      emailPromises.push(sendEventDeletedMail(user.username, user.email, existingEvent.title, dateString, existingEvent.time, existingEvent.location));
     }
+    await Promise.all(emailPromises);
 
     client.close();
     res.status(200).json({ message: "You've successfully deleted this event!" });

@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export const sendEventDeletedMail = (userName, userEmail, eventName, dateString, timeString, location) => {
+export const sendEventDeletedMail = async (userName, userEmail, eventName, dateString, timeString, location) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -20,16 +20,20 @@ export const sendEventDeletedMail = (userName, userEmail, eventName, dateString,
   };
 
   // Send the email to registered users
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    }else{
-      console.log('Email sent successfully:', info);
-    }
-  });
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+        reject(error)
+      } else {
+        console.log('Email sent successfully:', info);
+        resolve(info)
+      }
+    });
+  })
 }
 
-export const sendEventCommentedMail = (authorEmail, authorName, userName, eventName, eventId) => {
+export const sendEventCommentedMail = async (authorEmail, authorName, userName, eventName, eventId) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -39,15 +43,19 @@ export const sendEventCommentedMail = (authorEmail, authorName, userName, eventN
   };
 
   // Send the email to registered users
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    }else{
-      console.log('Email sent successfully:', info);
-    }
-  });
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+        reject(error)
+      } else {
+        console.log('Email sent successfully:', info);
+        resolve(info)
+      }
+    });
+  })
 }
-export const sendEventUpdatedMail = (userEmail, userName, eventName, eventId, newTitle, date, time, location, description) => {
+export const sendEventUpdatedMail = async (userEmail, userName, eventName, eventId, newTitle, date, time, location, description) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -57,13 +65,17 @@ export const sendEventUpdatedMail = (userEmail, userName, eventName, eventId, ne
   };
 
   // Send the email to registered users
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    }else{
-      console.log('Email sent successfully:', info);
-    }
-  });
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+        reject(error)
+      } else {
+        console.log('Email sent successfully:', info);
+        resolve(info)
+      }
+    });
+  })
 }
 
 export const sendActivateAccountMail = async (userEmail, userName, uuid) => {
@@ -81,7 +93,7 @@ export const sendActivateAccountMail = async (userEmail, userName, uuid) => {
       if (error) {
         console.log('Error sending email:', error);
         reject(error);
-      }else{
+      } else {
         console.log('Email sent successfully:', info);
         resolve(info)
       }
@@ -89,7 +101,7 @@ export const sendActivateAccountMail = async (userEmail, userName, uuid) => {
   })
 }
 
-export const sendEventSignUpMail = (userEmail, userName, eventName, date, time, location, ics) => {
+export const sendEventSignUpMail = async (userEmail, userName, eventName, date, time, location, ics) => {
   // Define the email options
   const mailOptions = {
     from: EMAIL_FROM,
@@ -106,13 +118,17 @@ export const sendEventSignUpMail = (userEmail, userName, eventName, date, time, 
   };
 
   // Send the email to registered users
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log('Error sending email:', error);
-    }else{
-      console.log('Email sent successfully:', info);
-    }
-  });
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error sending email:', error);
+        reject(error)
+      } else {
+        console.log('Email sent successfully:', info);
+        resolve(info)
+      }
+    });
+  })
 }
 
 const generateEventSignUpEmailTemplate = (userName, eventName, date, time, location, ics) => {
