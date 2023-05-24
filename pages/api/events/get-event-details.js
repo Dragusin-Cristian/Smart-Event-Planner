@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { connectClient } from "../../../utils/MongoDbUtils";
 
 async function handler(req, res) {
@@ -17,7 +18,14 @@ async function handler(req, res) {
   const client = await connectClient();
   const db = client.db();
   const registrationsCollection = db.collection("registrations");
-  const registrations = await registrationsCollection.find({ eventId: eventId }).project({ eventId: 0 }).toArray();
+  const commentsCollection = db.collection("comments");
+  const eventsCollection = db.collection("events");
+
+  const [registrations, comments, eventTitle] = await Promise.all([
+    registrationsCollection.find({ eventId: eventId }).project({ eventId: 0 }).toArray(),
+    commentsCollection.find({ eventId: eventId }).project({ usersString: 0, eventId: 0 }).toArray(),
+    eventsCollection.findOne({ _id: new ObjectId(eventId) }, {projection: {title: 1, _id: 0}})
+  ]);
 
   client.close();
   res.status(200).json({
@@ -26,7 +34,14 @@ async function handler(req, res) {
       signedUserId: reg.signedUserId,
       date: reg.date.toString(),
       _id: reg._id.toString()
-    })) : []
+    })) : [],
+    comments: comments ? comments.map(comm => ({
+      id: comm._id.toString(),
+      text: comm.text,
+      userName: comm.userName,
+      userId: comm.userId
+    })) : [],
+    eventTitle: eventTitle.title
   })
 }
 

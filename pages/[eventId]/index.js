@@ -22,8 +22,9 @@ const EventDetailsPage = ({ eventDetails }) => {
   const [errorEventRegistration, setErrorEventRegistration] = useState(null);
   const [errorComment, setErrorComment] = useState(null);
   const { id: eventId, title, startDate, endDate, description, location, startTime, endTime, authorName, authorId } = eventDetails;
-  const [registrations, setRegistrations] = useState([])
+  const [registrations, setRegistrations] = useState([]);
   const [comments, setComments] = useState([]);
+  const [latestEventTitle, setLatestEventTitle] = useState(title);
   const isAuthor = session.data?.user.userId === authorId;
 
   const signupUpForEvent = async () => {
@@ -31,7 +32,7 @@ const EventDetailsPage = ({ eventDetails }) => {
     try {
       const response = await axios.post("/api/events/signup-for-event", {
         eventId: eventId,
-        eventName: title,
+        eventName: latestEventTitle,
         eventStartDate: startDate,
         eventEndDate: endDate,
         eventStartTime: startTime,
@@ -94,13 +95,11 @@ const EventDetailsPage = ({ eventDetails }) => {
 
   useEffect(() => {
     const execute = async () => {
-      const [commentsP, registrationsP] = await Promise.all([
-        axios.get(`/api/events/get-event-comments?eventId=${eventId}`),
-        axios.get(`/api/events/get-event-registrations?eventId=${eventId}`),
-      ]);
-
-      setRegistrations(registrationsP.data.registrations);
-      setComments(commentsP.data.comments);
+      const details = await axios.get(`/api/events/get-event-details?eventId=${eventId}`)
+      const { comments, registrations, eventTitle } = details.data;
+      setLatestEventTitle(eventTitle);
+      setRegistrations(registrations);
+      setComments(comments);
     }
 
     execute();
@@ -134,10 +133,10 @@ const EventDetailsPage = ({ eventDetails }) => {
   return (
     <Fragment>
       <Head>
-        <title>{eventDetails.title} Event</title>
+        <title>{latestEventTitle} Event</title>
         <meta
           name="description"
-          content={`All details about the ${eventDetails.title} event: ${description}`}>
+          content={`All details about the ${latestEventTitle} event: ${description}`}>
         </meta>
       </Head>
 
@@ -147,7 +146,7 @@ const EventDetailsPage = ({ eventDetails }) => {
           <div className="halfOfFlex">
             <div className="insideHalfOfFLex">
               <ul>
-                <li>{L10n[language].title_word}: {eventDetails.title}</li>
+                <li>{L10n[language].title_word}: {latestEventTitle}</li>
                 <li>{L10n[language].author}: {isAuthor ? L10n[language].you_word : authorName}</li>
                 <li>{L10n[language].start_date}: {startDate}</li>
                 <li>{L10n[language].start_time}: {startTime}</li>
@@ -225,6 +224,7 @@ export async function getStaticProps(context) {
   client.close();
 
   return {
+    revalidate: 43200, // regenerate every 12 hours (maybe the author has edited the event) 
     props: {
       eventDetails: {
         id: event._id.toString(),
