@@ -16,19 +16,19 @@ export const authOptions = {
 
         if (!user) {
           client.close();
-          throw new Error("No user found!");
+          throw new Error("User not found.");
         }
 
         const isValid = await verifyPassword(credentials.password, user.password);
 
         if (!isValid) {
           client.close();
-          throw new Error("Invalid password!");
+          throw new Error("Invalid password.");
         }
 
         if (!user.activated) {
           client.close();
-          throw new Error("You need to activate your account first!");
+          throw new Error("You need to activate your account first.");
         }
 
         client.close();

@@ -12,8 +12,18 @@ async function handler(req, res) {
   const data = req.body;
   const { email, password, username } = data;
 
-  if (!email || !email.includes("@") || !password || password.trim().length < 7 || !username || username.trim().length === 0) {
-    res.status(422).json({ message: "Invalid credentials!" })
+  if (!email || !email.includes("@")) {
+    res.status(422).json({ message: "Invalid email address." })
+    return;
+  }
+
+  if (!username || username.trim().length === 0) {
+    res.status(422).json({ message: "Invalid username." })
+    return;
+  }
+
+  if (!password || password.trim().length < 7) {
+    res.status(422).json({ message: "Password should be at least 7 characters long." })
     return;
   }
 
@@ -23,7 +33,7 @@ async function handler(req, res) {
 
   if (existingUser) {
     client.close();
-    res.status(422).json({ message: "User already exists!" });
+    res.status(422).json({ message: "User already exists." });
     return;
   }
 
@@ -42,7 +52,7 @@ async function handler(req, res) {
   client.close();
 
   await sendActivateAccountMail(email, username, uuid);
-  res.status(201).json({ message: "Created user!" });
+  res.status(201).json({ message: "User created!" });
 
 }
 
