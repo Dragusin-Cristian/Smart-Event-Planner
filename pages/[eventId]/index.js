@@ -220,26 +220,32 @@ export async function getStaticProps(context) {
   const db = client.db();
 
   const eventsCollection = db.collection("events");
-  const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) })
-  client.close();
-
-  return {
-    revalidate: 43200, // regenerate every 12 hours (maybe the author has edited the event) 
-    props: {
-      eventDetails: {
-        id: event._id.toString(),
-        title: event.title,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        startTime: event.startTime,
-        endTime: event.endTime,
-        location: event.location,
-        description: event.description,
-        authorName: event.authorName,
-        authorId: event.authorId,
+  try {
+    const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) })
+    client.close();
+    return {
+      revalidate: 43200, // regenerate every 12 hours (maybe the author has edited the event) 
+      props: {
+        eventDetails: {
+          id: event._id.toString(),
+          title: event.title,
+          startDate: event.startDate,
+          endDate: event.endDate,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          location: event.location,
+          description: event.description,
+          authorName: event.authorName,
+          authorId: event.authorId,
+        }
       }
     }
+  } catch (error) {
+    return {
+      notFound: true
+    }
   }
+
 }
 
 export default EventDetailsPage;
