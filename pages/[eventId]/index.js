@@ -224,7 +224,7 @@ export async function getStaticProps(context) {
     const event = await eventsCollection.findOne({ _id: new ObjectId(eventId) })
     client.close();
     return {
-      revalidate: 43200, // regenerate every 12 hours (maybe the author has edited the event) 
+      revalidate: 30, // regenerate every 30 hours (maybe the author has edited the event) 
       props: {
         eventDetails: {
           id: event._id.toString(),
